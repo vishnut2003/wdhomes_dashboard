@@ -7,20 +7,8 @@ import "flatpickr/dist/flatpickr.min.css";
 import "jsvectormap/dist/jsvectormap.css";
 
 import { Header } from "@/components/Layouts/header";
-import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 import { Providers } from "../providers";
-import { headers } from "next/headers";
-import DefaultLayout from "@/layouts/DefaultLayout";
-
-export const metadata: Metadata = {
-  title: {
-    template: "%s | NextAdmin - Next.js Dashboard Kit",
-    default: "NextAdmin - Next.js Dashboard Kit",
-  },
-  description:
-    "Next.js admin dashboard toolkit with 200+ templates, UI components, and integrations for fast dashboard development.",
-};
 
 export default async function RootLayout({ children }: PropsWithChildren) {
 
