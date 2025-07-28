@@ -1,105 +1,59 @@
 import * as Icons from "../icons";
+import { RemixiconComponentType, RiAddLine, RiDashboard3Line, RiGroupLine, RiListCheck2, RiUserAddLine } from "@remixicon/react"
 
-export const NAV_DATA = [
+interface SidebarMenuItemsInterface {
+  label: string,
+  items: {
+    title: string,
+    icon: RemixiconComponentType,
+    url?: string,
+    items?: {
+      title: string,
+      url: string,
+    }[]
+  }[]
+}
+
+export const NAV_DATA: SidebarMenuItemsInterface[] = [
   {
     label: "MAIN MENU",
     items: [
       {
         title: "Dashboard",
-        icon: Icons.HomeIcon,
-        items: [
-          {
-            title: "eCommerce",
-            url: "/",
-          },
-        ],
-      },
-      {
-        title: "Calendar",
-        url: "/calendar",
-        icon: Icons.Calendar,
+        icon: RiDashboard3Line,
         items: [],
-      },
-      {
-        title: "Profile",
-        url: "/profile",
-        icon: Icons.User,
-        items: [],
-      },
-      {
-        title: "Forms",
-        icon: Icons.Alphabet,
-        items: [
-          {
-            title: "Form Elements",
-            url: "/forms/form-elements",
-          },
-          {
-            title: "Form Layout",
-            url: "/forms/form-layout",
-          },
-        ],
-      },
-      {
-        title: "Tables",
-        url: "/tables",
-        icon: Icons.Table,
-        items: [
-          {
-            title: "Tables",
-            url: "/tables",
-          },
-        ],
-      },
-      {
-        title: "Pages",
-        icon: Icons.Alphabet,
-        items: [
-          {
-            title: "Settings",
-            url: "/pages/settings",
-          },
-        ],
+        url: "/app",
       },
     ],
   },
   {
-    label: "OTHERS",
+    label: "Listings",
     items: [
       {
-        title: "Charts",
-        icon: Icons.PieChart,
-        items: [
-          {
-            title: "Basic Chart",
-            url: "/charts/basic-chart",
-          },
-        ],
+        title: "All Listings",
+        icon: RiListCheck2,
+        url: "/app/listings",
       },
       {
-        title: "UI Elements",
-        icon: Icons.FourCircle,
-        items: [
-          {
-            title: "Alerts",
-            url: "/ui-elements/alerts",
-          },
-          {
-            title: "Buttons",
-            url: "/ui-elements/buttons",
-          },
-        ],
-      },
-      {
-        title: "Authentication",
-        icon: Icons.Authentication,
-        items: [
-          {
-            title: "Sign In",
-            url: "/auth/sign-in",
-          },
-        ],
-      },
-    ],
+        title: "Add Listings",
+        icon: RiAddLine,
+        url: "/app/listings/add",
+      }
+    ]
   },
+  {
+    label: "Users",
+    items: [
+      {
+        title: "All Users",
+        icon: RiGroupLine,
+        url: "/app/admin/users",
+      },
+      {
+        title: "Add Users",
+        icon: RiUserAddLine,
+        url: "/app/admin/users/add",
+      }
+    ]
+  }
 ];

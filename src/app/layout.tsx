@@ -10,11 +10,9 @@ import type { PropsWithChildren } from "react";
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | NextAdmin - Next.js Dashboard Kit",
-    default: "NextAdmin - Next.js Dashboard Kit",
+    template: "%s | WD Homes - Dashboard",
+    default: "WD Homes - Dashboard",
   },
-  description:
-    "Next.js admin dashboard toolkit with 200+ templates, UI components, and integrations for fast dashboard development.",
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
@@ -23,7 +21,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <NextTopLoader color="#5750F1" showSpinner={false} />
+        <NextTopLoader color="#F9312F" showSpinner={false} />
         {children}
       </body>
     </html>

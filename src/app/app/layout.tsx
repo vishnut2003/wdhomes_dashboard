@@ -8,7 +8,6 @@ import "jsvectormap/dist/jsvectormap.css";
 
 import { Header } from "@/components/Layouts/header";
 import type { Metadata } from "next";
-import NextTopLoader from "nextjs-toploader";
 import type { PropsWithChildren } from "react";
 import { Providers } from "../providers";
 import { headers } from "next/headers";
@@ -23,31 +22,13 @@ export const metadata: Metadata = {
     "Next.js admin dashboard toolkit with 200+ templates, UI components, and integrations for fast dashboard development.",
 };
 
-const plainTemplateUrls = [
-  "/auth/sign-in",
-]
-
 export default async function RootLayout({ children }: PropsWithChildren) {
-
-  // Return plane template if Login page or Register page
-  const headerList = await headers();
-  const currentUrl = headerList.get("x-url") || headerList.get("referer");
-  const url = URL.canParse(currentUrl || "") && new URL(currentUrl || "");
-  
-  if (url && plainTemplateUrls.includes(url.pathname)) {
-    return (
-      <DefaultLayout>
-        {children}
-      </DefaultLayout>
-    )
-  }
 
   // Return Dashboard Layout
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
         <Providers>
-          <NextTopLoader color="#5750F1" showSpinner={false} />
 
           <div className="flex min-h-screen">
             <Sidebar />
