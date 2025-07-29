@@ -17,7 +17,7 @@ const buttonVariants = cva(
       },
       shape: {
         default: "",
-        rounded: "rounded-[5px]",
+        rounded: "rounded-[10px]",
         full: "rounded-full",
       },
       size: {

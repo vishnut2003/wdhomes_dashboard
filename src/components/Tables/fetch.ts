@@ -119,3 +119,59 @@ export async function getTopChannels() {
     },
   ];
 }
+
+interface AllUsersTableData {
+  fullname: string,
+  email: string,
+  nickName: string,
+  username: string,
+  role: "client" | "member" | "admin",
+  createdAt: Date,
+  image: string,
+}
+
+export async function getAllUsers() {
+  return new Promise<AllUsersTableData[]>((resolve, reject) => {
+    try {
+      const data: AllUsersTableData[] = [
+        {
+          fullname: "John David",
+          nickName: "John",
+          username: "john",
+          email: "test@email.com",
+          role: "admin",
+          createdAt: new Date(),
+          image: "/images/user/user-01.png"
+        },
+        {
+          fullname: "Mathew David",
+          nickName: "Mathew",
+          email: "test@email.com",
+          username: "Mathew",
+          role: "client",
+          createdAt: new Date(),
+          image: "/images/user/user-02.png"
+        },
+        {
+          fullname: "Mariya David",
+          nickName: "Mariya",
+          email: "test@email.com",
+          username: "Mariya",
+          role: "member",
+          createdAt: new Date(),
+          image: "/images/user/user-03.png"
+        },
+      ]
+      return resolve(data);
+    } catch (err) {
+      let errMessage = "Something went wrong!";
+      if (err instanceof Error) {
+        errMessage = err.message;
+      } else if (typeof err === "string") {
+        errMessage = err;
+      }
+
+      reject(errMessage);
+    }
+  })
+}
