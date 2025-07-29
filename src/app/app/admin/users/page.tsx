@@ -1,7 +1,12 @@
 import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb'
 import AllUsersTable from '@/components/Tables/users-table'
 import { Button } from '@/components/ui-elements/button'
+import { Metadata } from 'next';
 import React from 'react'
+
+export const metadata: Metadata = {
+  title: "All Users",
+};
 
 const AllUsersPage = () => {
   return (
@@ -13,7 +18,7 @@ const AllUsersPage = () => {
         className='my-5'
         size={"small"}
       />
-      <AllUsersTable/>
+      <AllUsersTable />
     </div>
   )
 }

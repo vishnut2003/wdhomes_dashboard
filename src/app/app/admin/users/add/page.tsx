@@ -4,7 +4,12 @@ import InputGroup from '@/components/FormElements/InputGroup'
 import { ShowcaseSection } from '@/components/Layouts/showcase-section'
 import { Button } from '@/components/ui-elements/button'
 import { RiAtLine, RiLockLine } from '@remixicon/react'
+import { Metadata } from 'next'
 import React from 'react'
+
+export const metadata: Metadata = {
+  title: "Add Users",
+};
 
 const AddUsersPage = () => {
   return (

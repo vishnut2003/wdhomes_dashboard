@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.20.7",
     "@remixicon/react": "^4.6.0",
     "apexcharts": "^4.5.0",
     "class-variance-authority": "^0.7.1",
