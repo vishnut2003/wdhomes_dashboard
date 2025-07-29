@@ -93,12 +93,12 @@ const ListingForm = () => {
 
             <ShowcaseSection
                 title='Listing Attributes'
-                className='space-y-5'
+                className='space-y-6'
             >
                 {
                     attributes.map((attr, i) => (
                         <div
-                            className='sm:flex flex-wrap space-y-5 sm:space-y-0'
+                            className={`sm:flex flex-wrap space-y-5 sm:space-y-0 ${i !== 0 ? "border-t border-[#E8E8E8] dark:border-dark-3 pt-4" : ""}`}
                             key={i}
                         >
                             <InputGroup
