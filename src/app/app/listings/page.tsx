@@ -2,7 +2,12 @@ import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb'
 import InputGroup from '@/components/FormElements/InputGroup'
 import AllListingsTable from '@/components/Tables/listings-table'
 import { Button } from '@/components/ui-elements/button'
+import { Metadata } from 'next'
 import React from 'react'
+
+export const metadata: Metadata = {
+  title: "All Listings",
+}
 
 const AllListingsPage = () => {
   return (
