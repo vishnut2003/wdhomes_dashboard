@@ -60,7 +60,7 @@ const AllListingsTable = async ({ className }: {
 
                             <TableCell
                                 className='text-right font-medium text-green-600'
-                            >&#8377;{channel.startFrom}</TableCell>
+                            >&#8377; {channel.startFrom}</TableCell>
 
                             <TableCell
                                 className='text-left'

@@ -43,7 +43,7 @@ const AllUsersPage = () => {
             label='Prev'
             variant={"primary"}
             shape={"rounded"}
-            className='bg-white text-black shadow-1 dark:bg-gray-dark dark:shadow-card'
+            className='bg-white text-black dark:text-white shadow-1 dark:bg-gray-dark dark:shadow-card'
           />
           <p
             className='text-black dark:text-white font-semibold'
@@ -52,7 +52,7 @@ const AllUsersPage = () => {
             label='Next'
             variant={"primary"}
             shape={"rounded"}
-            className='bg-white text-black shadow-1 dark:bg-gray-dark dark:shadow-card'
+            className='bg-white text-black dark:text-white shadow-1 dark:bg-gray-dark dark:shadow-card'
           />
         </div>
       </div>
