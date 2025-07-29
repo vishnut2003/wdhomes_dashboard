@@ -1,10 +1,9 @@
 'use client';
 
-import { ChevronUpIcon } from '@/assets/icons';
 import InputGroup from '@/components/FormElements/InputGroup'
 import { ShowcaseSection } from '@/components/Layouts/showcase-section'
 import { Button } from '@/components/ui-elements/button';
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import React, { useState } from 'react'
 
 const ListingForm = () => {
@@ -15,7 +14,6 @@ const ListingForm = () => {
         throw new Error("NEXT_PUBLIC_GOOGLE_CLOUD_API Key not found")
     }
 
-    const [isCityDropdownOpen, setIsCityDropdownOpen] = useState<boolean>(false);
     const [attributes, setAttributes] = useState<{
         label: string,
         value: string,
@@ -29,6 +27,11 @@ const ListingForm = () => {
             value: "",
         }
     ]);
+
+    const [mapPinPos, setMapPinPos] = useState<{
+        lat: number,
+        lng: number,
+    }>();
 
     return (
         <div
@@ -72,6 +75,8 @@ const ListingForm = () => {
                     />
                 </div>
 
+                <p>Select the exact location from Google Map below</p>
+
                 <LoadScript
                     googleMapsApiKey={GOOGLE_API_KEY}
                 >
@@ -86,7 +91,22 @@ const ListingForm = () => {
                             lat: 28.6139,
                             lng: 77.2090,
                         }}
-                    ></GoogleMap>
+                        onClick={(event) => {
+                            const lat = event.latLng?.lat();
+                            const lng = event.latLng?.lng();
+                            if (!lat || !lng) {
+                                return;
+                            }
+                            setMapPinPos({ lat, lng })
+                        }}
+                    >
+                        {
+                            mapPinPos &&
+                            <Marker
+                                position={mapPinPos}
+                            />
+                        }
+                    </GoogleMap>
                 </LoadScript>
 
             </ShowcaseSection>
