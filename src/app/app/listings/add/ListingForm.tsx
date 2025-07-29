@@ -128,11 +128,21 @@ const ListingForm = () => {
                     />
                     <Button
                         variant={"primary"}
-                        label='Add Attribute'
+                        label='Remove Attribute'
                         shape={"rounded"}
                     />
                 </div>
             </ShowcaseSection>
+
+            <div
+                className='flex justify-end'
+            >
+                <Button
+                    label='Add Listing'
+                    variant={"primary"}
+                    shape={"rounded"}
+                />
+            </div>
         </div>
     )
 }

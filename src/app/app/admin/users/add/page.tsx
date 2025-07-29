@@ -74,11 +74,15 @@ const AddUsersPage = () => {
             />
           </ShowcaseSection>
         </div>
-        <Button
-          label='Add User'
-          variant={"primary"}
-          shape={"rounded"}
-        />
+        <div
+          className='flex justify-end'
+        >
+          <Button
+            label='Add User'
+            variant={"primary"}
+            shape={"rounded"}
+          />
+        </div>
       </div>
     </div>
   )
