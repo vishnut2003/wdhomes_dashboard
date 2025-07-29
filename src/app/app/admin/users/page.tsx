@@ -41,18 +41,16 @@ const AllUsersPage = () => {
         >
           <Button
             label='Prev'
-            variant={"primary"}
             shape={"rounded"}
-            className='bg-white text-black dark:text-white shadow-1 dark:bg-gray-dark dark:shadow-card'
+            className='bg-white !text-black dark:!text-white shadow-1 dark:bg-gray-dark dark:shadow-card'
           />
           <p
             className='text-black dark:text-white font-semibold'
           >1</p>
           <Button
             label='Next'
-            variant={"primary"}
             shape={"rounded"}
-            className='bg-white text-black dark:text-white shadow-1 dark:bg-gray-dark dark:shadow-card'
+            className='bg-white !text-black dark:!text-white shadow-1 dark:bg-gray-dark dark:shadow-card'
           />
         </div>
       </div>
