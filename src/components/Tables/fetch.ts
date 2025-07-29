@@ -175,3 +175,50 @@ export async function getAllUsers() {
     }
   })
 }
+
+interface ListingsTableDataInterface {
+  name: string,
+  startFrom: number,
+  state: string,
+  city: string,
+}
+
+export async function getAllListings () {
+  return new Promise<ListingsTableDataInterface[]>((resolve, reject) => {
+    try {
+
+      const data: ListingsTableDataInterface[] = [
+        {
+          name: "Plot 1",
+          startFrom: 100000,
+          state: "Delhi",
+          city: "Test City",
+        },
+        {
+          name: "Plot 2",
+          startFrom: 200000,
+          state: "Delhi",
+          city: "Test City",
+        },
+        {
+          name: "Plot 1",
+          startFrom: 350000,
+          state: "Delhi",
+          city: "Test City",
+        },
+      ]
+
+      return resolve(data);
+
+    } catch (err) {
+      let errMessage = "Something went wrong!";
+      if (err instanceof Error) {
+        errMessage = err.message;
+      } else if (typeof err === "string") {
+        errMessage = err;
+      }
+
+      reject(err);
+    }
+  })
+}
