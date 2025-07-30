@@ -11,8 +11,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { LogOutIcon, SettingsIcon, UserIcon } from "./icons";
+import { signOut, useSession } from "next-auth/react";
+import { Session } from "next-auth";
 
-export function UserInfo() {
+export function UserInfo({ session }: {
+  session: Session,
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const USER = {
@@ -36,7 +40,7 @@ export function UserInfo() {
             height={200}
           />
           <figcaption className="flex items-center gap-1 font-medium text-dark dark:text-dark-6 max-[1024px]:sr-only">
-            <span>{USER.name}</span>
+            <span>{session?.user.name}</span>
 
             <ChevronUpIcon
               aria-hidden
@@ -51,7 +55,7 @@ export function UserInfo() {
       </DropdownTrigger>
 
       <DropdownContent
-        className="border border-stroke bg-white shadow-md dark:border-dark-3 dark:bg-gray-dark min-[230px]:min-w-[17.5rem]"
+        className="border border-stroke bg-white shadow-md dark:border-dark-3 dark:bg-gray-dark min-[230px]:min-w-[20.5rem]"
         align="end"
       >
         <h2 className="sr-only">User information</h2>
@@ -68,10 +72,10 @@ export function UserInfo() {
 
           <figcaption className="space-y-1 text-base font-medium">
             <div className="mb-2 leading-none text-dark dark:text-white">
-              {USER.name}
+              {session?.user.name}
             </div>
 
-            <div className="leading-none text-gray-6">{USER.email}</div>
+            <div className="leading-none text-gray-6">{session?.user.email}</div>
           </figcaption>
         </figure>
 
@@ -97,7 +101,10 @@ export function UserInfo() {
         <div className="p-2 text-base text-[#4B5563] dark:text-dark-6">
           <button
             className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[9px] hover:bg-gray-2 hover:text-dark dark:hover:bg-dark-3 dark:hover:text-white"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              setIsOpen(false);
+              signOut();
+            }}
           >
             <LogOutIcon />
 

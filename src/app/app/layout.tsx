@@ -9,8 +9,17 @@ import "jsvectormap/dist/jsvectormap.css";
 import { Header } from "@/components/Layouts/header";
 import type { PropsWithChildren } from "react";
 import { Providers } from "../providers";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOption } from "../api/auth/[...nextauth]/route";
 
 export default async function RootLayout({ children }: PropsWithChildren) {
+
+  const userSession = await getServerSession(authOption);
+
+  if (!userSession) {
+    redirect('/auth/sign-in');
+  }
 
   // Return Dashboard Layout
   return (
@@ -22,7 +31,9 @@ export default async function RootLayout({ children }: PropsWithChildren) {
             <Sidebar />
 
             <div className="w-full bg-gray-2 dark:bg-[#020d1a]">
-              <Header />
+              <Header
+                session={userSession}
+              />
 
               <main className="isolate mx-auto w-full max-w-screen-2xl overflow-hidden p-4 md:p-6 2xl:p-10">
                 {children}

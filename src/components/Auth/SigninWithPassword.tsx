@@ -1,12 +1,17 @@
 "use client";
 import { EmailIcon, PasswordIcon } from "@/assets/icons";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputGroup from "../FormElements/InputGroup";
 import { Checkbox } from "../FormElements/checkbox";
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import { RiErrorWarningLine } from "@remixicon/react";
 
 export default function SigninWithPassword() {
+
+  const searchParams = useSearchParams();
+
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -14,6 +19,7 @@ export default function SigninWithPassword() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({
@@ -31,12 +37,20 @@ export default function SigninWithPassword() {
     await signIn("email", {
       email: data.email,
       password: data.password,
+      callbackUrl: "/app",
     });
 
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
   };
+
+  useEffect(() => {
+    const loginError = searchParams.get('error');
+    console.log(loginError)
+
+    if (loginError) {
+      setError("Incorrect login credentials!");
+    }
+
+  }, [])
 
   return (
     <form onSubmit={handleSubmit}>
@@ -96,6 +110,17 @@ export default function SigninWithPassword() {
           )}
         </button>
       </div>
+      {
+        error &&
+        <div
+          className="flex items-center gap-3 py-3 px-4 bg-red/20 text-red font-medium rounded-md"
+        >
+          <RiErrorWarningLine
+            size={20}
+          />
+          <p>{error}</p>
+        </div>
+      }
     </form>
   );
 }

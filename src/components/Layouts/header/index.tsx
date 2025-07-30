@@ -8,8 +8,11 @@ import { MenuIcon } from "./icons";
 import { Notification } from "./notification";
 import { ThemeToggleSwitch } from "./theme-toggle";
 import { UserInfo } from "./user-info";
+import { Session } from "next-auth";
 
-export function Header() {
+export function Header({ session }: {
+  session: Session,
+}) {
   const { toggleSidebar, isMobile } = useSidebarContext();
 
   return (
@@ -57,7 +60,9 @@ export function Header() {
         <Notification />
 
         <div className="shrink-0">
-          <UserInfo />
+          <UserInfo
+            session={session}
+          />
         </div>
       </div>
     </header>

@@ -2,14 +2,23 @@ import Signin from "@/components/Auth/Signin";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import PlainLayout from "@/layouts/PlainLayout";
 import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Sign in",
 };
 
-export default function SignIn() {
+export default async function SignIn() {
+
+  const userSession = await getServerSession();
+
+  if (userSession) {
+    redirect('/app');
+  }
+
   return (
     <PlainLayout>
       <Breadcrumb pageName="Sign In" />
