@@ -6,6 +6,14 @@ import { Button } from '@/components/ui-elements/button'
 import { RiAtLine, RiLockLine } from '@remixicon/react'
 import { Metadata } from 'next'
 import React from 'react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import InputDropdownElement from '@/components/ui-elements/InputDropdown'
 
 export const metadata: Metadata = {
   title: "Add Users",
@@ -72,6 +80,27 @@ const AddUsersPage = () => {
               iconPosition="left"
               height="sm"
             />
+
+            <InputDropdownElement
+              label='Select User Role'
+              placeholder='Role'
+              valueOnChange={() => {}}
+              options={[
+                {
+                  label: "Manager",
+                  value: "manager",
+                },
+                {
+                  label: "Member",
+                  value: "member",
+                },
+                {
+                  label: "Client",
+                  value: "client",
+                }
+              ]}
+            />
+
           </ShowcaseSection>
         </div>
         <div

@@ -3,8 +3,10 @@
 import InputGroup from '@/components/FormElements/InputGroup'
 import { ShowcaseSection } from '@/components/Layouts/showcase-section'
 import { Button } from '@/components/ui-elements/button';
+import FileUploadUI from '@/components/ui-elements/FileUploadUI';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import React, { useState } from 'react'
+import ImageGalleryUpload from './ImageGalleryUpload';
 
 const ListingForm = () => {
 
@@ -37,6 +39,18 @@ const ListingForm = () => {
         <div
             className='space-y-6'
         >
+            <ShowcaseSection
+                title='Listings Featured Image'
+            >
+                <FileUploadUI />
+            </ShowcaseSection>
+
+            <ShowcaseSection
+                title='Listing Gallery'
+            >
+                <ImageGalleryUpload />
+            </ShowcaseSection>
+
             <ShowcaseSection
                 title='Listings Informations'
                 className='space-y-5'
