@@ -50,7 +50,7 @@ export default function SigninWithPassword() {
       setError("Incorrect login credentials!");
     }
 
-  }, [])
+  }, [searchParams])
 
   return (
     <form onSubmit={handleSubmit}>

@@ -63,7 +63,7 @@ export function Sidebar() {
 
         setSidebarMenu(menuItems);
       })
-  }, [pathname, expandedItems]);
+  }, [pathname, expandedItems, router]);
 
   return (
     <>
