@@ -3,15 +3,22 @@
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NAV_DATA } from "./data";
 import { ArrowLeftIcon, ChevronUp } from "./icons";
 import { MenuItem } from "./menu-item";
 import { useSidebarContext } from "./sidebar-context";
+import { getSession } from "next-auth/react";
+import { conditionRenderMenus } from "./permissionRenderMenu";
 
 export function Sidebar() {
+
+  const [sidebarMenu, setSidebarMenu] = useState<typeof NAV_DATA>([]);
+
   const pathname = usePathname();
+  const router = useRouter();
+
   const { setIsOpen, isOpen, isMobile, toggleSidebar } = useSidebarContext();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
@@ -40,6 +47,21 @@ export function Sidebar() {
         });
       });
     });
+
+    getSession()
+      .then((session) => {
+        if (!session?.user.role) {
+          router.push('/auth/sign-in');
+          return;
+        }
+
+        const menuItems = conditionRenderMenus({
+          NAV_DATA,
+          role: session.user.role,
+        })
+
+        setSidebarMenu(menuItems);
+      })
   }, [pathname, expandedItems]);
 
   return (
@@ -87,7 +109,7 @@ export function Sidebar() {
 
           {/* Navigation */}
           <div className="custom-scrollbar mt-6 flex-1 overflow-y-auto pr-3 min-[850px]:mt-10">
-            {NAV_DATA.map((section) => (
+            {sidebarMenu.map((section) => (
               <div key={section.label} className="mb-6">
                 <h2 className="mb-5 text-sm font-medium text-dark-4 dark:text-dark-6">
                   {section.label}
@@ -116,7 +138,7 @@ export function Sidebar() {
                                 className={cn(
                                   "ml-auto rotate-180 transition-transform duration-200",
                                   expandedItems.includes(item.title) &&
-                                    "rotate-0",
+                                  "rotate-0",
                                 )}
                                 aria-hidden="true"
                               />
@@ -147,7 +169,7 @@ export function Sidebar() {
                               "url" in item
                                 ? item.url + ""
                                 : "/" +
-                                  item.title.toLowerCase().split(" ").join("-");
+                                item.title.toLowerCase().split(" ").join("-");
 
                             return (
                               <MenuItem

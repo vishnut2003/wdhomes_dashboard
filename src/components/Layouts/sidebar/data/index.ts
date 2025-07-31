@@ -1,7 +1,7 @@
 import * as Icons from "../icons";
 import { RemixiconComponentType, RiAddLine, RiDashboard3Line, RiGroupLine, RiListCheck2, RiUserAddLine } from "@remixicon/react"
 
-interface SidebarMenuItemsInterface {
+export interface SidebarMenuItemsInterface {
   label: string,
   items: {
     title: string,
