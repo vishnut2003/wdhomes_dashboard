@@ -11,7 +11,7 @@ import type { PropsWithChildren } from "react";
 import { Providers } from "../providers";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOption } from "../api/auth/[...nextauth]/route";
+import { authOption } from "../api/auth/[...nextauth]/authOptions";
 
 export default async function RootLayout({ children }: PropsWithChildren) {
 
