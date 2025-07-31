@@ -1,4 +1,4 @@
-import { SignupUserApiRouterRequestData } from "@/app/api/userManager/signup/route";
+import { SignupUserApiRouterRequestData } from "@/app/api/user-manager/signup/route";
 import { dbConnect } from "@/configs/dbConfig";
 import { generateHashFromValue } from "@/functions/bcrypt";
 import UserModel, { UserModelInterface } from "@/models/UserModel";
