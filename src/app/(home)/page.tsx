@@ -9,6 +9,9 @@ import { ChatsCard } from "./_components/chats-card";
 import { OverviewCardsGroup } from "./_components/overview-cards";
 import { OverviewCardsSkeleton } from "./_components/overview-cards/skeleton";
 import { RegionLabels } from "./_components/region-labels";
+import { getServerSession } from "next-auth";
+import { authOption } from "../api/auth/[...nextauth]/authOptions";
+import { redirect } from "next/navigation";
 
 type PropsType = {
   searchParams: Promise<{
@@ -19,6 +22,14 @@ type PropsType = {
 export default async function Home({ searchParams }: PropsType) {
   const { selected_time_frame } = await searchParams;
   const extractTimeFrame = createTimeFrameExtractor(selected_time_frame);
+
+  const userSession = await getServerSession(authOption);
+
+  if (userSession) {
+    redirect("/app");
+  } else {
+    redirect('/auth/sign-in');
+  }
 
   return (
     <h1>Home Page</h1>
