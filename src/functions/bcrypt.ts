@@ -19,3 +19,20 @@ export async function generateHashFromValue({ value }: {
         }
     })
 }
+
+export function compareHashValue ({
+    hash,
+    value,
+}: {
+    value: string,
+    hash: string,
+}) {
+    return new Promise<boolean>(async (resolve, reject) => {
+        try {
+            const match = await bcrypt.compare(value, hash);
+            return resolve(match);
+        } catch (err) {
+            return reject(err);
+        }
+    })
+}

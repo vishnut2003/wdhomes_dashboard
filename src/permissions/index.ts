@@ -6,6 +6,7 @@ interface RolesPermissionsListInterface {
 const permissions: RolesPermissionsListInterface = {
     "all": [
         "/app",
+        "/app/my-account",
     ],
     "manager": [
         "/app/admin/users/add",

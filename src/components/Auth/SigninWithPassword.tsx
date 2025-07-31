@@ -7,6 +7,7 @@ import { Checkbox } from "../FormElements/checkbox";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { RiErrorWarningLine } from "@remixicon/react";
+import ErrorElement from "../ui-elements/ErrorElement";
 
 export default function SigninWithPassword() {
 
@@ -30,6 +31,12 @@ export default function SigninWithPassword() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
+
+    if (!data.email || !data.password) {
+      setError("Please fill required fields.");
+      return;
+    }
 
     // You can remove this code block
     setLoading(true);
@@ -55,10 +62,10 @@ export default function SigninWithPassword() {
   return (
     <form onSubmit={handleSubmit}>
       <InputGroup
-        type="email"
-        label="Email"
+        type="text"
+        label="Username or Email address"
         className="mb-4 [&_input]:py-[15px]"
-        placeholder="Enter your email"
+        placeholder="Enter your email or username"
         name="email"
         handleChange={handleChange}
         value={data.email}
@@ -104,7 +111,7 @@ export default function SigninWithPassword() {
           type="submit"
           className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-primary p-4 font-medium text-white transition hover:bg-opacity-90"
         >
-          Sign In
+          {loading ? "Verifying..." : "Sign In"}
           {loading && (
             <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent dark:border-primary dark:border-t-transparent" />
           )}
@@ -112,14 +119,9 @@ export default function SigninWithPassword() {
       </div>
       {
         error &&
-        <div
-          className="flex items-center gap-3 py-3 px-4 bg-red/20 text-red font-medium rounded-md"
-        >
-          <RiErrorWarningLine
-            size={20}
-          />
-          <p>{error}</p>
-        </div>
+        <ErrorElement
+          message={error}
+        />
       }
     </form>
   );

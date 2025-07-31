@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { verifySuperAdmin } from "./verifySuperAdmin";
 import { UserRoleType } from "@/types/next-auth";
+import { verifyOtherUsers } from "./verifyOtherUsers";
 
 export const authOption: NextAuthOptions = {
     providers: [
@@ -34,7 +35,12 @@ export const authOption: NextAuthOptions = {
                         return superAdmin;
                     }
 
-                    return null;
+                    const user = await verifyOtherUsers({
+                        emailOrUsername: credentials.email,
+                        password: credentials.password,
+                    })
+
+                    return user;
                 } catch (err) {
                     console.log("Catch", err);
                     return null
