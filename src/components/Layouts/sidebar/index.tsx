@@ -11,6 +11,7 @@ import { MenuItem } from "./menu-item";
 import { useSidebarContext } from "./sidebar-context";
 import { getSession } from "next-auth/react";
 import { conditionRenderMenus } from "./permissionRenderMenu";
+import { motion } from "framer-motion";
 
 export function Sidebar() {
 
@@ -118,7 +119,11 @@ export function Sidebar() {
                 <nav role="navigation" aria-label={section.label}>
                   <ul className="space-y-2">
                     {section.items.map((item) => (
-                      <li key={item.title}>
+                      <motion.li
+                        key={item.title}
+                        initial={{ x: -100 }}
+                        animate={{ x: 0 }}
+                      >
                         {item.items?.length ? (
                           <div>
                             <MenuItem
@@ -188,7 +193,7 @@ export function Sidebar() {
                             );
                           })()
                         )}
-                      </li>
+                      </motion.li>
                     ))}
                   </ul>
                 </nav>
