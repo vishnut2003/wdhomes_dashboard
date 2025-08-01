@@ -1,4 +1,6 @@
 import * as logos from "@/assets/logos";
+import { UserModelInterface } from "@/models/UserModel";
+import { UserRoleType } from "@/types/next-auth";
 
 export async function getTopProducts() {
   // Fake delay
@@ -120,48 +122,10 @@ export async function getTopChannels() {
   ];
 }
 
-interface AllUsersTableData {
-  fullname: string,
-  email: string,
-  nickName: string,
-  username: string,
-  role: "client" | "executive" | "admin",
-  createdAt: Date,
-  image: string,
-}
-
 export async function getAllUsers() {
-  return new Promise<AllUsersTableData[]>((resolve, reject) => {
+  return new Promise<UserModelInterface[]>((resolve, reject) => {
     try {
-      const data: AllUsersTableData[] = [
-        {
-          fullname: "John David",
-          nickName: "John",
-          username: "john",
-          email: "test@email.com",
-          role: "admin",
-          createdAt: new Date(),
-          image: "/images/user/user-01.png"
-        },
-        {
-          fullname: "Mathew David",
-          nickName: "Mathew",
-          email: "test@email.com",
-          username: "Mathew",
-          role: "client",
-          createdAt: new Date(),
-          image: "/images/user/user-02.png"
-        },
-        {
-          fullname: "Mariya David",
-          nickName: "Mariya",
-          email: "test@email.com",
-          username: "Mariya",
-          role: "executive",
-          createdAt: new Date(),
-          image: "/images/user/user-03.png"
-        },
-      ]
+      const data: UserModelInterface[] = []
       return resolve(data);
     } catch (err) {
       let errMessage = "Something went wrong!";

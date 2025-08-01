@@ -9,6 +9,8 @@ export interface UserModelInterface extends mongoose.Document {
     email: string,
     password: string,
     role: UserRoleType,
+    createdAt: Date,
+    updatedAt: Date,
 }
 
 const userSchema = new mongoose.Schema<UserModelInterface>({
@@ -43,7 +45,7 @@ const userSchema = new mongoose.Schema<UserModelInterface>({
         type: String,
         required: true,
     },
-})
+}, { timestamps: true });
 
 const UserModel = mongoose.models.Users || mongoose.model("Users", userSchema);
 export default UserModel;

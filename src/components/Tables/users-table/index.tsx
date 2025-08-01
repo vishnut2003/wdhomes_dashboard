@@ -1,15 +1,14 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import React from 'react'
-import { getAllUsers } from '../fetch';
-import Image from 'next/image';
 import { Button } from '@/components/ui-elements/button';
+import { generateRandomHexColor } from '@/functions/common';
+import { GetAllUsersDataResponse } from '@/functions/server/usersHelpers/getAllUsers';
 
-const AllUsersTable = async ({ className }: {
+const AllUsersTable = async ({ className, data }: {
     className?: string,
+    data: GetAllUsersDataResponse,
 }) => {
-
-    const data = await getAllUsers();
 
     return (
         <div
@@ -39,54 +38,60 @@ const AllUsersTable = async ({ className }: {
                 </TableHeader>
 
                 <TableBody>
-                    {data.map((channel, i) => (
-                        <TableRow
-                            className="text-center text-base font-medium text-dark dark:text-white"
-                            key={channel.nickName + i}
-                        >
-                            <TableCell className="flex min-w-fit items-center gap-3">
-                                <Image
-                                    src={channel.image}
-                                    className="size-8 rounded-full object-cover"
-                                    width={40}
-                                    height={40}
-                                    alt={channel.nickName + " Logo"}
-                                    role="presentation"
-                                />
-                                <div className="">{channel.fullname}</div>
-                            </TableCell>
+                    {data.data.map((user, i) => {
 
-                            <TableCell
-                                className='text-left'
+                        const hexColor = generateRandomHexColor();
+
+                        return (
+                            <TableRow
+                                className="text-center text-base font-medium text-dark dark:text-white"
+                                key={user.nickname + i}
                             >
-                                <p>{channel.username}</p>
-                                <p
-                                    className='text-xs line-clamp-1 max-w-full'
-                                >{channel.email}</p>
-                            </TableCell>
+                                <TableCell className="flex min-w-fit items-center gap-3">
+                                    <div
+                                        className="min-w-[45px] min-h-[45px] font-semibold text-sm flex items-center justify-center rounded-full"
+                                        style={{
+                                            backgroundColor: `${hexColor}40`,
+                                            color: `${hexColor}`
+                                        }}
+                                    >
+                                        {user.nickname?.[0]}
+                                    </div>
+                                    <div>{user.fullname}</div>
+                                </TableCell>
 
-                            <TableCell
-                                className='text-left'
-                            >
-                                {channel.nickName}
-                            </TableCell>
+                                <TableCell
+                                    className='text-left'
+                                >
+                                    <p>{user.username}</p>
+                                    <p
+                                        className='text-xs line-clamp-1 max-w-full'
+                                    >{user.email}</p>
+                                </TableCell>
 
-                            <TableCell
-                                className='text-left'
-                            >{channel.role}</TableCell>
+                                <TableCell
+                                    className='text-left'
+                                >
+                                    {user.nickname}
+                                </TableCell>
 
-                            <TableCell
-                                className='text-left'
-                            >
-                                <Button
-                                    label='Edit'
-                                    variant={"primary"}
-                                    size={"small"}
-                                    shape={"rounded"}
-                                />
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                                <TableCell
+                                    className='text-left'
+                                >{user.role}</TableCell>
+
+                                <TableCell
+                                    className='text-left'
+                                >
+                                    <Button
+                                        label='Edit'
+                                        variant={"primary"}
+                                        size={"small"}
+                                        shape={"rounded"}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        )
+                    })}
                 </TableBody>
             </Table>
         </div>

@@ -68,6 +68,8 @@ const UserForm = () => {
         } catch (err) {
             const message = handleCatchBlock(err);
             setError(message);
+            setInProgress(false);
+            return;
         }
 
         setSuccess(true);

@@ -2,14 +2,41 @@ import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb'
 import InputGroup from '@/components/FormElements/InputGroup';
 import AllUsersTable from '@/components/Tables/users-table'
 import { Button } from '@/components/ui-elements/button'
+import { UserRoleType } from '@/types/next-auth';
 import { Metadata } from 'next';
 import React from 'react'
+import UsersFiltersElement from './Filters';
+import UserTablePagination from './Pagination';
+import { getAllUsers } from '@/functions/server/usersHelpers/getAllUsers';
 
 export const metadata: Metadata = {
   title: "All Users",
 };
 
-const AllUsersPage = () => {
+type Props = {
+  searchParams: Promise<{
+    search?: string,
+    role?: UserRoleType,
+    page?: string,
+  }>
+}
+
+const AllUsersPage = async ({ searchParams }: Props) => {
+
+  const queries = await searchParams;
+
+  let pageNumber: string | number = queries.page || '1';
+  pageNumber = parseInt(pageNumber);
+
+  const search = queries.search
+  const role = queries.role;
+
+  const data = await getAllUsers({
+    pageNumber,
+    role,
+    search,
+  });
+
   return (
     <div className="mx-auto w-full max-w-[1080px]">
       <Breadcrumb pageName="All Users" />
@@ -20,40 +47,20 @@ const AllUsersPage = () => {
         size={"small"}
       />
 
-      <div
-        className='mb-5'
-      >
-        <InputGroup
-          label='Search User'
-          placeholder='john@email.com'
-          type='email'
-          className='rounded-[10px] bg-white px-7.5 py-4 shadow-1 dark:bg-gray-dark dark:shadow-card'
-        />
-      </div>
+      <UsersFiltersElement />
 
-      <AllUsersTable />
+      <AllUsersTable
+        data={data}
+      />
 
-      <div
-        className='w-full mt-5'
-      >
-        <div
-          className='flex flex-nowrap gap-3 items-center justify-center w-full'
-        >
-          <Button
-            label='Prev'
-            shape={"rounded"}
-            className='bg-white !text-black dark:!text-white shadow-1 dark:bg-gray-dark dark:shadow-card'
-          />
-          <p
-            className='text-black dark:text-white font-semibold'
-          >1</p>
-          <Button
-            label='Next'
-            shape={"rounded"}
-            className='bg-white !text-black dark:!text-white shadow-1 dark:bg-gray-dark dark:shadow-card'
-          />
-        </div>
-      </div>
+      <p
+        className='text-center font-semibold mt-3'
+      >{data.totalRecords} Results</p>
+
+      <UserTablePagination
+        pageNumber={data.currentPage}
+        totalPages={data.totalPages}
+      />
     </div>
   )
 }
