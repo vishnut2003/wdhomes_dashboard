@@ -14,7 +14,7 @@ const permissions: RolesPermissionsListInterface = {
         "/app/listings/add",
         "/app/listings",
     ],
-    "member": [
+    "executive": [
         "/app/listings/add",
         "/app/listings",
     ],

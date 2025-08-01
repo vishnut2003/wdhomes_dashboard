@@ -10,13 +10,17 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { LogOutIcon, SettingsIcon, UserIcon } from "./icons";
-import { signOut, useSession } from "next-auth/react";
+import { LogOutIcon, SettingsIcon } from "./icons";
+import { signOut } from "next-auth/react";
 import { Session } from "next-auth";
+import { generateRandomHexColor } from "@/functions/common";
 
 export function UserInfo({ session }: {
   session: Session,
 }) {
+
+  const hexColor = generateRandomHexColor();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const USER = {
@@ -31,14 +35,15 @@ export function UserInfo({ session }: {
         <span className="sr-only">My Account</span>
 
         <figure className="flex items-center gap-3">
-          <Image
-            src={USER.img}
-            className="size-12"
-            alt={`Avatar of ${USER.name}`}
-            role="presentation"
-            width={200}
-            height={200}
-          />
+          <div
+            className="min-w-[40px] min-h-[40px] font-semibold text-sm flex items-center justify-center rounded-full"
+            style={{
+              backgroundColor: `${hexColor}40`,
+              color: `${hexColor}`
+            }}
+          >
+            {session.user.name?.[0]}
+          </div>
           <figcaption className="flex items-center gap-1 font-medium text-dark dark:text-dark-6 max-[1024px]:sr-only">
             <span>{session?.user.name}</span>
 

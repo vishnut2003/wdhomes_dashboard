@@ -191,8 +191,8 @@ const UserForm = () => {
                                 value: "manager",
                             },
                             {
-                                label: "Member",
-                                value: "member",
+                                label: "Executive",
+                                value: "executive",
                             },
                             {
                                 label: "Client",

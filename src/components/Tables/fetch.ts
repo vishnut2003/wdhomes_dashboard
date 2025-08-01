@@ -125,7 +125,7 @@ interface AllUsersTableData {
   email: string,
   nickName: string,
   username: string,
-  role: "client" | "member" | "admin",
+  role: "client" | "executive" | "admin",
   createdAt: Date,
   image: string,
 }
@@ -157,7 +157,7 @@ export async function getAllUsers() {
           nickName: "Mariya",
           email: "test@email.com",
           username: "Mariya",
-          role: "member",
+          role: "executive",
           createdAt: new Date(),
           image: "/images/user/user-03.png"
         },
