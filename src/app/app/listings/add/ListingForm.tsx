@@ -5,16 +5,53 @@ import { ShowcaseSection } from '@/components/Layouts/showcase-section'
 import { Button } from '@/components/ui-elements/button';
 import FileUploadUI from '@/components/ui-elements/FileUploadUI';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import React, { useState } from 'react'
+import React, { ChangeEvent, FormEvent, useState } from 'react'
 import ImageGalleryUpload from './ImageGalleryUpload';
+import InputDropdownElement from '@/components/ui-elements/InputDropdown';
+import CitiesList from '@/types/CitiesLists';
+import { TextAreaGroup } from '@/components/FormElements/InputGroup/text-area';
+import TiptapEditor from '@/components/ui-elements/RichTextEditor';
+import Image from 'next/image';
+import { handleAddListingFormSubmit } from './handleSubmit';
+import { handleCatchBlock } from '@/functions/common';
+import ErrorElement from '@/components/ui-elements/ErrorElement';
+import SuccessElement from '@/components/ui-elements/SuccessElement';
+import { RiLoaderLine } from '@remixicon/react';
 
 const ListingForm = () => {
+
+    const [error, setError] = useState<string | null>(null);
+    const [inProgress, setInProgress] = useState<boolean>(false);
+    const [success, setSuccess] = useState<boolean>(false);
 
     const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_CLOUD_API;
 
     if (!GOOGLE_API_KEY) {
         throw new Error("NEXT_PUBLIC_GOOGLE_CLOUD_API Key not found")
     }
+
+    const [featuredImage, setFeaturedImage] = useState<File | null>(null);
+    const [imageGallery, setImageGallery] = useState<File[]>([]);
+
+    const [formData, setFormData] = useState<{
+        listingName: string,
+        listingPrice: string,
+        description: string,
+        location: {
+            address: string,
+            state: string,
+            city: string,
+        }
+    }>({
+        listingName: "",
+        listingPrice: "",
+        description: "<p>Hello World!</p>",
+        location: {
+            city: "",
+            address: "",
+            state: "",
+        },
+    });
 
     const [attributes, setAttributes] = useState<{
         label: string,
@@ -24,10 +61,6 @@ const ListingForm = () => {
             label: "",
             value: "",
         },
-        {
-            label: "",
-            value: "",
-        }
     ]);
 
     const [mapPinPos, setMapPinPos] = useState<{
@@ -36,34 +69,121 @@ const ListingForm = () => {
     }>();
 
     return (
-        <div
+        <form
             className='space-y-6'
+            onSubmit={async (event) => {
+                event.preventDefault();
+                setError(null)
+                setInProgress(true)
+
+                try {
+
+                    await handleAddListingFormSubmit({
+                        name: formData.listingName,
+                        price: formData.listingPrice,
+                        featuredImage,
+                        description: formData.description,
+                        imageGallery,
+                        attributes,
+                        location: {
+                            ...formData.location,
+                            pinpoint: mapPinPos || null,
+                        }
+                    })
+
+                    setSuccess(true)
+                    setTimeout(() => setSuccess(false), 5000);
+
+                } catch (err) {
+                    const message = handleCatchBlock(err);
+                    setError(message);
+                }
+
+                setInProgress(false);
+            }}
         >
             <ShowcaseSection
                 title='Listings Featured Image'
             >
-                <FileUploadUI />
+                {
+                    featuredImage ?
+                        <div
+                            className='w-full'
+                        >
+                            <Image
+                                alt='Featured image'
+                                src={URL.createObjectURL(featuredImage)}
+                                width={1000}
+                                height={500}
+                                className='w-full h-auto rounded-md'
+                            />
+
+                            <Button
+                                label='Delete Image'
+                                shape={"rounded"}
+                                size={"small"}
+                                className='mt-5'
+                                onClick={() => {
+                                    setFeaturedImage(null);
+                                }}
+                            />
+                        </div>
+                        : <FileUploadUI
+                            setFiles={setFeaturedImage}
+                        />
+                }
             </ShowcaseSection>
 
             <ShowcaseSection
                 title='Listing Gallery'
             >
-                <ImageGalleryUpload />
+                <ImageGalleryUpload
+                    images={imageGallery}
+                    setImages={setImageGallery}
+                />
             </ShowcaseSection>
 
             <ShowcaseSection
-                title='Listings Informations'
+                title='Listing Informations'
                 className='space-y-5'
             >
                 <InputGroup
                     label='Listing Name'
                     placeholder='Plot 123'
                     type='text'
+                    value={formData.listingName}
+                    handleChange={(event) => {
+                        setFormData(prev => ({
+                            ...prev,
+                            listingName: event.target.value,
+                        }));
+                    }}
                 />
                 <InputGroup
                     label='Price start from'
                     placeholder='100000'
                     type='number'
+                    value={formData.listingPrice}
+                    handleChange={(event) => {
+                        setFormData(prev => ({
+                            ...prev,
+                            listingPrice: event.target.value,
+                        }));
+                    }}
+                />
+            </ShowcaseSection>
+
+            <ShowcaseSection
+                title='Listing Description'
+            >
+                <TiptapEditor
+                    value={formData?.description}
+                    setValue={(html) => {
+                        setFormData(prev => ({
+                            ...prev,
+                            description: html,
+                        }))
+                    }}
                 />
             </ShowcaseSection>
 
@@ -72,20 +192,55 @@ const ListingForm = () => {
                 className='space-y-5'
             >
                 <div
-                    className='sm:flex flex-wrap space-y-5 sm:space-y-0'
+                    className='sm:flex flex-wrap space-y-5 sm:space-y-0 gap-y-3'
                 >
                     <InputGroup
                         label='State'
                         placeholder='State'
                         type='text'
                         className='w-full sm:w-1/2 pl-0 sm:pr-[10px]'
+                        value={formData.location.state}
+                        handleChange={(event) => {
+                            setFormData(prev => ({
+                                ...prev,
+                                location: {
+                                    ...prev.location,
+                                    state: event.target.value,
+                                }
+                            }));
+                        }}
                     />
 
-                    <InputGroup
+                    <InputDropdownElement
                         label='City'
+                        options={CitiesList}
                         placeholder='City'
-                        type='text'
-                        className='w-full sm:w-1/2 pl-0 sm:pl-[10px]'
+                        className='w-1/2'
+                        valueOnChange={(value) => {
+                            setFormData(prev => ({
+                                ...prev,
+                                location: {
+                                    ...prev.location,
+                                    city: value,
+                                }
+                            }));
+                        }}
+                    />
+
+                    <TextAreaGroup
+                        label='Address'
+                        placeholder='Address'
+                        className='w-full'
+                        value={formData.location.address}
+                        onChange={(event) => {
+                            setFormData(prev => ({
+                                ...prev,
+                                location: {
+                                    ...prev.location,
+                                    address: event.target.value,
+                                }
+                            }))
+                        }}
                     />
                 </div>
 
@@ -140,6 +295,14 @@ const ListingForm = () => {
                                 placeholder='Rooms'
                                 type='text'
                                 className='w-full sm:w-1/2 pl-0 sm:pr-[10px]'
+                                value={attr.label}
+                                handleChange={(event) => {
+                                    setAttributes(prev => {
+                                        const prevCopy = [...prev];
+                                        prevCopy[i].label = event.target.value;
+                                        return [...prevCopy];
+                                    })
+                                }}
                             />
 
                             <InputGroup
@@ -147,6 +310,14 @@ const ListingForm = () => {
                                 placeholder='3'
                                 type='text'
                                 className='w-full sm:w-1/2 pl-0 sm:pl-[10px]'
+                                value={attr.value}
+                                handleChange={(event) => {
+                                    setAttributes(prev => {
+                                        const prevCopy = [...prev];
+                                        prevCopy[i].value = event.target.value;
+                                        return [...prevCopy];
+                                    })
+                                }}
                             />
                         </div>
                     ))
@@ -159,25 +330,69 @@ const ListingForm = () => {
                         variant={"green"}
                         label='Add Attribute'
                         shape={"rounded"}
+                        onClick={() => {
+                            setAttributes(prev => {
+                                const prevCopy = [...prev];
+                                prevCopy.push({
+                                    label: "",
+                                    value: "",
+                                });
+                                return [...prevCopy];
+                            })
+                        }}
                     />
                     <Button
                         variant={"primary"}
                         label='Remove Attribute'
                         shape={"rounded"}
+                        onClick={() => {
+                            setAttributes(prev => {
+                                if (prev.length > 1) {
+                                    const prevCopy = [...prev];
+                                    prevCopy.pop();
+                                    return [...prevCopy];
+                                } else {
+                                    return prev;
+                                }
+                            })
+                        }}
                     />
                 </div>
             </ShowcaseSection>
+
+            {
+                error &&
+                <ErrorElement
+                    message={error}
+                />
+            }
+
+            {
+                success &&
+                <SuccessElement
+                    message={"Listing added"}
+                />
+            }
 
             <div
                 className='flex justify-end'
             >
                 <Button
-                    label='Add Listing'
+                    label={inProgress ? "Loading..." : 'Add Listing'}
                     variant={"primary"}
                     shape={"rounded"}
+                    className='disabled:opacity-60'
+                    icon={
+                        inProgress &&
+                        <RiLoaderLine
+                            size={20}
+                            className='animate-spin'
+                        />
+                    }
+                    disabled={inProgress}
                 />
             </div>
-        </div>
+        </form>
     )
 }
 

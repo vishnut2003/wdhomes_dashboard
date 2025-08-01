@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useId } from "react";
+import { ChangeEvent, useId } from "react";
 
 interface PropsType {
   label: string;
@@ -10,6 +10,8 @@ interface PropsType {
   className?: string;
   icon?: React.ReactNode;
   defaultValue?: string;
+  value?: string,
+  onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void,
 }
 
 export function TextAreaGroup({
@@ -21,6 +23,8 @@ export function TextAreaGroup({
   className,
   icon,
   defaultValue,
+  value,
+  onChange,
 }: PropsType) {
   const id = useId();
 
@@ -46,6 +50,8 @@ export function TextAreaGroup({
           required={required}
           disabled={disabled}
           data-active={active}
+          onChange={onChange}
+          value={value}
         />
 
         {icon}

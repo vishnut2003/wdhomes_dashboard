@@ -1,7 +1,9 @@
 import { UploadIcon } from '@/assets/icons'
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 
-const FileUploadUI = () => {
+const FileUploadUI = ({ setFiles }: {
+    setFiles: Dispatch<SetStateAction<File | null>>
+}) => {
     return (
         <div className="relative mb-5.5 block w-full rounded-xl border border-dashed border-gray-4 bg-gray-2 hover:border-primary dark:border-dark-3 dark:bg-dark-2 dark:hover:border-primary">
             <input
@@ -9,6 +11,12 @@ const FileUploadUI = () => {
                 name="profilePhoto"
                 id="profilePhoto"
                 accept="image/png, image/jpg, image/jpeg"
+                onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (file) {
+                        setFiles(file)
+                    }
+                }}
                 hidden
             />
 

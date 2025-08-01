@@ -12,6 +12,8 @@
     "@radix-ui/react-select": "^2.2.5",
     "@react-google-maps/api": "^2.20.7",
     "@remixicon/react": "^4.6.0",
+    "@tiptap/react": "^3.0.8",
+    "@tiptap/starter-kit": "^3.0.8",
     "apexcharts": "^4.5.0",
     "axios": "^1.11.0",
     "bcrypt": "^6.0.0",
