@@ -2,7 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { cn } from '@/lib/utils';
 import React from 'react'
 import { Button } from '@/components/ui-elements/button';
-import { generateRandomHexColor } from '@/functions/common';
+import { generateRandomHexColor, hexToRgb } from '@/functions/common';
 import { GetAllUsersDataResponse } from '@/functions/server/usersHelpers/getAllUsers';
 
 const AllUsersTable = async ({ className, data }: {
@@ -51,8 +51,8 @@ const AllUsersTable = async ({ className, data }: {
                                     <div
                                         className="min-w-[45px] min-h-[45px] font-semibold text-sm flex items-center justify-center rounded-full"
                                         style={{
-                                            backgroundColor: `${hexColor}40`,
-                                            color: `${hexColor}`
+                                            backgroundColor: hexToRgb(`${hexColor}40`),
+                                            color: hexToRgb(`${hexColor}`),
                                         }}
                                     >
                                         {user.nickname?.[0]}

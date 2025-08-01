@@ -13,7 +13,7 @@ import { useState } from "react";
 import { LogOutIcon, SettingsIcon } from "./icons";
 import { signOut } from "next-auth/react";
 import { Session } from "next-auth";
-import { generateRandomHexColor } from "@/functions/common";
+import { generateRandomHexColor, hexToRgb } from "@/functions/common";
 
 export function UserInfo({ session }: {
   session: Session,
@@ -38,8 +38,8 @@ export function UserInfo({ session }: {
           <div
             className="min-w-[40px] min-h-[40px] font-semibold text-sm flex items-center justify-center rounded-full"
             style={{
-              backgroundColor: `${hexColor}40`,
-              color: `${hexColor}`
+              backgroundColor: hexToRgb(`${hexColor}40`),
+              color: hexToRgb(`${hexColor}`)
             }}
           >
             {session.user.name?.[0]}
@@ -69,8 +69,8 @@ export function UserInfo({ session }: {
           <div
             className="min-w-[45px] min-h-[45px] font-semibold text-sm flex items-center justify-center rounded-full"
             style={{
-              backgroundColor: `${hexColor}40`,
-              color: `${hexColor}`
+              backgroundColor: hexToRgb(`${hexColor}40`),
+              color: hexToRgb(`${hexColor}`)
             }}
           >
             {session.user.name?.[0]}
