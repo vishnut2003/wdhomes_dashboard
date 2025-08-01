@@ -66,14 +66,15 @@ export function UserInfo({ session }: {
         <h2 className="sr-only">User information</h2>
 
         <figure className="flex items-center gap-2.5 px-5 py-3.5">
-          <Image
-            src={USER.img}
-            className="size-12"
-            alt={`Avatar for ${USER.name}`}
-            role="presentation"
-            width={200}
-            height={200}
-          />
+          <div
+            className="min-w-[45px] min-h-[45px] font-semibold text-sm flex items-center justify-center rounded-full"
+            style={{
+              backgroundColor: `${hexColor}40`,
+              color: `${hexColor}`
+            }}
+          >
+            {session.user.name?.[0]}
+          </div>
 
           <figcaption className="space-y-1 text-base font-medium">
             <div className="mb-2 leading-none text-dark dark:text-white">
