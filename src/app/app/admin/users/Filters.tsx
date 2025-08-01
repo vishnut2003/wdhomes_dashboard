@@ -65,16 +65,28 @@ const UsersFiltersElement = () => {
                         value: "manager",
                     },
                     {
-                        label: "Exicutive",
-                        value: "exicutive",
+                        label: "Executive",
+                        value: "executive",
                     },
                     {
                         label: "Client",
                         value: "client",
-                    }
+                    },
+                    {
+                        label: "All",
+                        value: "all",
+                    },
                 ]}
-                placeholder='Manager/Client/Exicutive'
-                valueOnChange={(value) => setUserRole(value as UserRoleType)}
+                placeholder='Manager/Client/Executive'
+                valueOnChange={(value) => {
+                    setUserRole(() => {
+                        if (value === "all") {
+                            return null;
+                        } else {
+                            return value as UserRoleType
+                        }
+                    })
+                }}
                 className='w-full'
             />
             <Button

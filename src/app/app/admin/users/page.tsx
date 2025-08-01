@@ -8,6 +8,8 @@ import React from 'react'
 import UsersFiltersElement from './Filters';
 import UserTablePagination from './Pagination';
 import { getAllUsers } from '@/functions/server/usersHelpers/getAllUsers';
+import Link from 'next/link';
+import { RiAddLine } from '@remixicon/react';
 
 export const metadata: Metadata = {
   title: "All Users",
@@ -40,12 +42,15 @@ const AllUsersPage = async ({ searchParams }: Props) => {
   return (
     <div className="mx-auto w-full max-w-[1080px]">
       <Breadcrumb pageName="All Users" />
-      <Button
-        label='Add Users'
-        shape={"rounded"}
-        className='my-5'
-        size={"small"}
-      />
+      <Link
+        className='flex items-center gap-3 py-3 px-4 rounded-md bg-primary text-white w-max mb-3'
+        href={'/app/admin/users/add'}
+      >
+        <RiAddLine
+          size={20}
+        />
+        Add User
+      </Link>
 
       <UsersFiltersElement />
 

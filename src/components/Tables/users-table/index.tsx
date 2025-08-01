@@ -76,7 +76,7 @@ const AllUsersTable = async ({ className, data }: {
                                 </TableCell>
 
                                 <TableCell
-                                    className='text-left'
+                                    className='text-left capitalize'
                                 >{user.role}</TableCell>
 
                                 <TableCell
