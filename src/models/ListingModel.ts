@@ -8,7 +8,7 @@ export interface ListingModelInterface extends mongoose.Document {
     name: string,
     slug: string,
     status: ListingsStatusType,
-    userId: string | UserModelInterface,
+    userId: string | UserModelInterface | undefined,
     featuredImage: string,
     galleryImages: string[],
     price: number,

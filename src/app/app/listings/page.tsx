@@ -2,23 +2,55 @@ import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb'
 import InputGroup from '@/components/FormElements/InputGroup'
 import AllListingsTable from '@/components/Tables/listings-table'
 import { Button } from '@/components/ui-elements/button'
+import { getAllListings } from '@/functions/server/listingsHelpers/getAllListings'
+import { ListingsStatusType } from '@/models/ListingModel'
+import { RiAddLine } from '@remixicon/react'
 import { Metadata } from 'next'
+import Link from 'next/link'
 import React from 'react'
 
 export const metadata: Metadata = {
   title: "All Listings",
 }
 
-const AllListingsPage = () => {
+type Props = {
+  searchParams: Promise<{
+    search?: string,
+    status?: ListingsStatusType,
+    page?: string,
+  }>
+}
+
+const AllListingsPage = async ({
+  searchParams,
+}: Props) => {
+
+  const queries = await searchParams;
+
+  let pageNumber: string | number = queries.page || '1';
+  pageNumber = parseInt(pageNumber);
+
+  const search = queries.search
+  const status = queries.status;
+
+  const response = await getAllListings({
+    pageNumber,
+    search,
+    status,
+  })
+
   return (
     <div className="mx-auto w-full max-w-[1080px]">
       <Breadcrumb pageName="All Listings" />
-      <Button
-        label='Add Listings'
-        shape={"rounded"}
-        className='my-5'
-        size={"small"}
-      />
+      <Link
+        className='flex items-center gap-3 py-3 px-4 rounded-[10px] bg-primary text-white w-max mb-3'
+        href={'/app/listings/add'}
+      >
+        <RiAddLine
+          size={20}
+        />
+        Add Listings
+      </Link>
 
       <div
         className='mb-5'
@@ -31,7 +63,9 @@ const AllListingsPage = () => {
         />
       </div>
 
-      <AllListingsTable />
+      <AllListingsTable
+        data={response}
+      />
 
       <div
         className='w-full mt-5'

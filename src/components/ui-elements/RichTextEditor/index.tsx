@@ -30,7 +30,7 @@ export default function TiptapEditor({
 
     useEffect(() => {
         editor?.commands.setContent('<p>Hello World!</p>');
-    }, [reset])
+    }, [reset, editor])
 
     return (
         <div className="border p-4 rounded">
