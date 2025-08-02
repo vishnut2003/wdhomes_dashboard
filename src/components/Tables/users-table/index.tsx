@@ -41,6 +41,7 @@ const AllUsersTable = async ({ className, data }: {
                     {data.data.map((user, i) => {
 
                         const hexColor = generateRandomHexColor();
+                        const { r, g, b } = hexToRgb(hexColor);
 
                         return (
                             <TableRow
@@ -51,8 +52,8 @@ const AllUsersTable = async ({ className, data }: {
                                     <div
                                         className="min-w-[45px] min-h-[45px] font-semibold text-sm flex items-center justify-center rounded-full"
                                         style={{
-                                            backgroundColor: hexToRgb(`${hexColor}40`),
-                                            color: hexToRgb(`${hexColor}`),
+                                            backgroundColor: `rgb(${r}, ${g}, ${b}, 0.2)`,
+                                            color: `rgb(${r}, ${g}, ${b})`,
                                         }}
                                     >
                                         {user.nickname?.[0]}

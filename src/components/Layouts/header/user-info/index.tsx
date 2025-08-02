@@ -9,7 +9,7 @@ import {
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LogOutIcon, SettingsIcon } from "./icons";
 import { signOut } from "next-auth/react";
 import { Session } from "next-auth";
@@ -19,15 +19,15 @@ export function UserInfo({ session }: {
   session: Session,
 }) {
 
-  const hexColor = generateRandomHexColor();
+  const [rgbColor, setRgbColor] = useState<{ r: number, g: number, b: number } | null>(null);
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const USER = {
-    name: "John Smith",
-    email: "johnson@nextadmin.com",
-    img: "/images/user/user-03.png",
-  };
+  useEffect(() => {
+    const hexColor = generateRandomHexColor();
+    const { r, g, b } = hexToRgb(hexColor);
+    setRgbColor({ r, g, b });
+  }, [])
 
   return (
     <Dropdown isOpen={isOpen} setIsOpen={setIsOpen}>
@@ -35,15 +35,18 @@ export function UserInfo({ session }: {
         <span className="sr-only">My Account</span>
 
         <figure className="flex items-center gap-3">
-          <div
-            className="min-w-[40px] min-h-[40px] font-semibold text-sm flex items-center justify-center rounded-full"
-            style={{
-              backgroundColor: hexToRgb(`${hexColor}40`),
-              color: hexToRgb(`${hexColor}`)
-            }}
-          >
-            {session.user.name?.[0]}
-          </div>
+          {
+            rgbColor &&
+            <div
+              className="min-w-[40px] min-h-[40px] font-semibold text-sm flex items-center justify-center rounded-full"
+              style={{
+                backgroundColor: `rgb(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}, 0.2)`,
+                color: `rgb(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b})`
+              }}
+            >
+              {session.user.name?.[0]}
+            </div>
+          }
           <figcaption className="flex items-center gap-1 font-medium text-dark dark:text-dark-6 max-[1024px]:sr-only">
             <span>{session?.user.name}</span>
 
@@ -66,15 +69,18 @@ export function UserInfo({ session }: {
         <h2 className="sr-only">User information</h2>
 
         <figure className="flex items-center gap-2.5 px-5 py-3.5">
-          <div
-            className="min-w-[45px] min-h-[45px] font-semibold text-sm flex items-center justify-center rounded-full"
-            style={{
-              backgroundColor: hexToRgb(`${hexColor}40`),
-              color: hexToRgb(`${hexColor}`)
-            }}
-          >
-            {session.user.name?.[0]}
-          </div>
+          {
+            rgbColor &&
+            <div
+              className="min-w-[45px] min-h-[45px] font-semibold text-sm flex items-center justify-center rounded-full"
+              style={{
+                backgroundColor: `rgb(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b}, 0.2)`,
+                color: `rgb(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b})`
+              }}
+            >
+              {session.user.name?.[0]}
+            </div>
+          }
 
           <figcaption className="space-y-1 text-base font-medium">
             <div className="mb-2 leading-none text-dark dark:text-white">

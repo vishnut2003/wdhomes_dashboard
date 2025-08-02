@@ -36,5 +36,5 @@ export function hexToRgb(hex: string) {
     const g = (bigint >> 8) & 255;
     const b = bigint & 255;
 
-    return `rgb(${r}, ${g}, ${b})`; // returns an object
+    return { r, g, b }; // returns an object
 }
