@@ -43,7 +43,7 @@ const AllUsersPage = async ({ searchParams }: Props) => {
     <div className="mx-auto w-full max-w-[1080px]">
       <Breadcrumb pageName="All Users" />
       <Link
-        className='flex items-center gap-3 py-3 px-4 rounded-md bg-primary text-white w-max mb-3'
+        className='flex items-center gap-3 py-3 px-4 rounded-[10px] bg-primary text-white w-max mb-3'
         href={'/app/admin/users/add'}
       >
         <RiAddLine
