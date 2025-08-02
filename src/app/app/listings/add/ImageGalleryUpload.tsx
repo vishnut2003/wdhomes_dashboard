@@ -24,6 +24,7 @@ const ImageGalleryUpload = ({
                         fileInputRef.current.click();
                     }
                 }}
+                type='button'
             >
                 <UploadIcon />
                 Upload Image Gallery

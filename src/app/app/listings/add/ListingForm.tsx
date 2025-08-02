@@ -23,6 +23,7 @@ const ListingForm = () => {
     const [error, setError] = useState<string | null>(null);
     const [inProgress, setInProgress] = useState<boolean>(false);
     const [success, setSuccess] = useState<boolean>(false);
+    const [resetTipTapEditor, setResetTipTapEditor] = useState<number>(0);
 
     const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_CLOUD_API;
 
@@ -35,6 +36,7 @@ const ListingForm = () => {
 
     const [formData, setFormData] = useState<{
         listingName: string,
+        slug: string,
         listingPrice: string,
         description: string,
         location: {
@@ -44,6 +46,7 @@ const ListingForm = () => {
         }
     }>({
         listingName: "",
+        slug: "",
         listingPrice: "",
         description: "<p>Hello World!</p>",
         location: {
@@ -80,6 +83,7 @@ const ListingForm = () => {
 
                     await handleAddListingFormSubmit({
                         name: formData.listingName,
+                        slug: formData.slug,
                         price: formData.listingPrice,
                         featuredImage,
                         description: formData.description,
@@ -93,6 +97,29 @@ const ListingForm = () => {
 
                     setSuccess(true)
                     setTimeout(() => setSuccess(false), 5000);
+
+                    setFormData({
+                        description: '',
+                        listingName: '',
+                        listingPrice: '',
+                        location: {
+                            state: "",
+                            address: "",
+                            city: "",
+                        },
+                        slug: '',
+                    })
+
+                    setMapPinPos(undefined)
+                    setAttributes([
+                        {
+                            label: "",
+                            value: "",
+                        }
+                    ])
+                    setFeaturedImage(null)
+                    setImageGallery([]);
+                    setResetTipTapEditor(prev => ++prev);
 
                 } catch (err) {
                     const message = handleCatchBlock(err);
@@ -126,6 +153,7 @@ const ListingForm = () => {
                                 onClick={() => {
                                     setFeaturedImage(null);
                                 }}
+                                type='button'
                             />
                         </div>
                         : <FileUploadUI
@@ -160,6 +188,19 @@ const ListingForm = () => {
                     }}
                 />
                 <InputGroup
+                    label='Listing Slug'
+                    placeholder='plot-123'
+                    type='text'
+                    value={formData.slug}
+                    handleChange={(event) => {
+                        const value = event.target.value.toLowerCase().split(' ').join('-')
+                        setFormData(prev => ({
+                            ...prev,
+                            slug: value,
+                        }));
+                    }}
+                />
+                <InputGroup
                     label='Price start from'
                     placeholder='100000'
                     type='number'
@@ -178,6 +219,7 @@ const ListingForm = () => {
             >
                 <TiptapEditor
                     value={formData?.description}
+                    reset={resetTipTapEditor}
                     setValue={(html) => {
                         setFormData(prev => ({
                             ...prev,
@@ -329,6 +371,7 @@ const ListingForm = () => {
                     <Button
                         variant={"green"}
                         label='Add Attribute'
+                        type='button'
                         shape={"rounded"}
                         onClick={() => {
                             setAttributes(prev => {
@@ -344,6 +387,7 @@ const ListingForm = () => {
                     <Button
                         variant={"primary"}
                         label='Remove Attribute'
+                        type='button'
                         shape={"rounded"}
                         onClick={() => {
                             setAttributes(prev => {

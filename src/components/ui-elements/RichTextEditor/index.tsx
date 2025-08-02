@@ -5,15 +5,18 @@ import StarterKit from '@tiptap/starter-kit';
 import InputDropdownElement from '../InputDropdown';
 import { RemixiconComponentType, RiBold, RiLinksLine } from '@remixicon/react';
 import Link from "@tiptap/extension-link";
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
 export default function TiptapEditor({
     value,
     setValue,
+    reset,
 }: {
     value: string,
     setValue: (html: string) => void,
+    reset: number,
 }) {
+
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -24,6 +27,10 @@ export default function TiptapEditor({
         },
         immediatelyRender: false,
     });
+
+    useEffect(() => {
+        editor?.commands.setContent('<p>Hello World!</p>');
+    }, [reset])
 
     return (
         <div className="border p-4 rounded">

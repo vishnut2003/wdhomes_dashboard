@@ -1,9 +1,12 @@
 'use client';
 
+import axios from "axios";
+
 export async function handleAddListingFormSubmit(listingData: {
     featuredImage: File | null,
     imageGallery: File[],
     name: string,
+    slug: string,
     price: string,
     description: string,
     location: {
@@ -26,6 +29,7 @@ export async function handleAddListingFormSubmit(listingData: {
             const rootDataValidate = [
                 'featuredImage',
                 'name',
+                'slug',
                 'price',
                 'description',
             ];
@@ -56,9 +60,29 @@ export async function handleAddListingFormSubmit(listingData: {
                 throw new Error("Select Atleast one gallery image.");
             }
 
-            console.log(listingData);
+            const formData = new FormData();
 
-            await new Promise(resolve => setTimeout(resolve, 5000));
+            for (const [key, value] of Object.entries(listingData)) {
+                let data: string | File = ""
+                if (key === "location" || key === "attributes") {
+                    data = JSON.stringify(value);
+                } else if (key === "imageGallery") {
+                    for (const image of value as File[]) {
+                        formData.append('imageGallery', image);
+                    }
+                    continue;
+                } else {
+                    data = value as string;
+                }
+
+                formData.append(key, data);
+            }
+
+            await axios.post('/api/listing-manager/create', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            })
 
             return resolve();
 
