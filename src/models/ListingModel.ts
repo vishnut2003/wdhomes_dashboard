@@ -80,11 +80,11 @@ const listingSchema = new mongoose.Schema<ListingModelInterface>({
         },
         pinpoint: {
             lat: {
-                type: String,
+                type: Number,
                 required: true,
             },
             lng: {
-                type: String,
+                type: Number,
                 required: true,
             },
         },

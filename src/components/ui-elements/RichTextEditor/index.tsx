@@ -3,18 +3,18 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import InputDropdownElement from '../InputDropdown';
-import { RemixiconComponentType, RiBold, RiLinksLine } from '@remixicon/react';
-import Link from "@tiptap/extension-link";
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useEffect } from 'react';
 
 export default function TiptapEditor({
     value,
     setValue,
     reset,
+    disableUseEffect,
 }: {
     value: string,
     setValue: (html: string) => void,
     reset: number,
+    disableUseEffect?: boolean,
 }) {
 
     const editor = useEditor({
@@ -29,6 +29,11 @@ export default function TiptapEditor({
     });
 
     useEffect(() => {
+
+        if (disableUseEffect) {
+            return;
+        }
+
         editor?.commands.setContent('<p>Hello World!</p>');
     }, [reset, editor])
 

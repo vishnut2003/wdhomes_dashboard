@@ -5,6 +5,7 @@ import { Button } from '@/components/ui-elements/button';
 import { GetAllListingsDataResponse } from '@/functions/server/listingsHelpers/getAllListings';
 import UserTableUserInfo from './UserInfo';
 import ActionMenu from './ActionMenu';
+import { LucideColumnsSettings } from 'lucide-react';
 
 const AllListingsTable = async ({ className, data }: {
     className?: string,
@@ -88,7 +89,9 @@ const AllListingsTable = async ({ className, data }: {
                             <TableCell
                                 className='text-left'
                             >
-                                <ActionMenu/>
+                                <ActionMenu
+                                    listingSlug={listing.slug}
+                                />
                             </TableCell>
                         </TableRow>
                     ))}

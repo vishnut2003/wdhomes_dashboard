@@ -38,3 +38,32 @@ export function hexToRgb(hex: string) {
 
     return { r, g, b }; // returns an object
 }
+
+export async function bufferToFile({
+    buffer,
+    fileName,
+    type,
+}: {
+    buffer: Buffer,
+    fileName: string,
+    type: string,
+}) {
+    return new Promise<File>((resolve, reject) => {
+        try {
+            const file = new File([buffer], fileName, {
+                type,
+            });
+
+            return resolve(file);
+
+        } catch (err) {
+            return reject(err);
+        }
+    })
+}
+
+export function base64ToFile(data: string, name: string, type: string) {
+    const byteArray = Uint8Array.from(atob(data), c => c.charCodeAt(0));
+    const file = new File([byteArray], name, { type });
+    return file;
+}

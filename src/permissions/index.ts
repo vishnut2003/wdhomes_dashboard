@@ -11,12 +11,16 @@ const permissions: RolesPermissionsListInterface = {
     "manager": [
         "/app/admin/users/add",
         "/app/admin/users",
-        "/app/listings/add",
         "/app/listings",
+        "/app/listings/add",
+        "/app/listings/edit",
+        "/app/listings/updates",
     ],
     "executive": [
-        "/app/listings/add",
         "/app/listings",
+        "/app/listings/add",
+        "/app/listings/edit",
+        "/app/listings/updates",
     ],
     "client": [
         "/app",
