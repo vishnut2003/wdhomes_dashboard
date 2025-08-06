@@ -43,50 +43,56 @@ export default function TiptapEditor({
             <div
                 className='flex items-end gap-3'
             >
-                <InputDropdownElement
-                    label='Element'
-                    options={[
+
+                {
+                    [
                         {
-                            label: "Heading 1 (h1)",
+                            label: "h1",
                             value: "1",
                         },
                         {
-                            label: "Heading 2 (h2)",
+                            label: "h2",
                             value: "2",
                         },
                         {
-                            label: "Heading 3 (h3)",
+                            label: "h3",
                             value: "3",
                         },
                         {
-                            label: "Heading 4 (h4)",
+                            label: "h4",
                             value: "4",
                         },
                         {
-                            label: "Heading 5 (h5)",
+                            label: "h5",
                             value: "5",
                         },
                         {
-                            label: "Heading 6 (h6)",
+                            label: "h6",
                             value: "6",
                         },
                         {
                             label: "Paragraph",
                             value: "p",
                         },
-                    ]}
-                    placeholder='Select Element'
-                    valueOnChange={(value) => {
-                        if (value === "p") {
-                            editor?.chain().focus().setParagraph().run();
-                        } else {
-                            const headingValue = parseInt(value);
-                            if (headingValue > 0 && headingValue <= 6) {
-                                editor?.chain().focus().setHeading({ level: headingValue as any }).run();
-                            }
-                        }
-                    }}
-                />
+                    ].map((option, index) => (
+                        <button
+                            key={index}
+                            className='text-sm py-2 px-3 font-semibold rounded-md bg-dark-2 text-white dark:bg-white dark:text-dark-2'
+                            onClick={() => {
+                                if (option.value === "p") {
+                                    editor?.chain().focus().setParagraph().run();
+                                } else {
+                                    const headingValue = parseInt(option.value);
+                                    if (headingValue > 0 && headingValue <= 6) {
+                                        editor?.chain().focus().setHeading({ level: headingValue as any }).run();
+                                    }
+                                }
+                            }}
+                        >
+                            {option.label}
+                        </button>
+                    ))
+                }
 
             </div>
 

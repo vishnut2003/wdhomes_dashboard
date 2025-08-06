@@ -27,10 +27,10 @@ const UserTableUserInfo = ({ userData }: {
             }
             <div>
                 <p
-                    className='font-semibold'
+                    className='font-semibold capitalize'
                 >{userData.username}</p>
                 <p
-                    className='text-xs'
+                    className='text-xs capitalize'
                 >{userData.role}</p>
             </div>
         </div>

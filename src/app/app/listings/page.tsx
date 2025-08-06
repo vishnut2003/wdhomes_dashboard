@@ -8,6 +8,8 @@ import { RiAddLine } from '@remixicon/react'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import React from 'react'
+import ListingsTablePagination from './Pagination'
+import ListingsFilterElement from './Filters'
 
 export const metadata: Metadata = {
   title: "All Listings",
@@ -52,44 +54,20 @@ const AllListingsPage = async ({
         Add Listings
       </Link>
 
-      <div
-        className='mb-5'
-      >
-        <InputGroup
-          label='Search Listings'
-          placeholder='Plot 123'
-          type='text'
-          className='rounded-[10px] bg-white px-7.5 py-4 shadow-1 dark:bg-gray-dark dark:shadow-card'
-        />
-      </div>
+      <ListingsFilterElement/>
 
       <AllListingsTable
         data={response}
       />
 
-      <div
-        className='w-full mt-5'
-      >
-        <div
-          className='flex flex-nowrap gap-3 items-center justify-center w-full'
-        >
-          <Button
-            label='Prev'
-            variant={"primary"}
-            shape={"rounded"}
-            className='bg-white !text-black dark:!text-white shadow-1 dark:bg-gray-dark dark:shadow-card'
-          />
-          <p
-            className='text-black dark:text-white font-semibold'
-          >1</p>
-          <Button
-            label='Next'
-            variant={"primary"}
-            shape={"rounded"}
-            className='bg-white !text-black dark:!text-white shadow-1 dark:bg-gray-dark dark:shadow-card'
-          />
-        </div>
-      </div>
+      <p
+        className='text-center font-semibold mt-3'
+      >{response.totalRecords} Results</p>
+
+      <ListingsTablePagination
+        pageNumber={response.currentPage}
+        totalPages={response.totalPages}
+      />
     </div>
   )
 }

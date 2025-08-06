@@ -17,6 +17,7 @@ import { handleCatchBlock } from '@/functions/common';
 import ErrorElement from '@/components/ui-elements/ErrorElement';
 import SuccessElement from '@/components/ui-elements/SuccessElement';
 import { RiLoaderLine } from '@remixicon/react';
+import { convertAddressToCord } from '@/functions/client/GoogleMap';
 
 const ListingForm = () => {
 
@@ -287,6 +288,23 @@ const ListingForm = () => {
                         }}
                     />
                 </div>
+
+                {
+                    formData.location.address &&
+                    <Button
+                        label='Find in Google Map'
+                        shape={"rounded"}
+                        size={"small"}
+                        variant={"primary"}
+                        type='button'
+                        onClick={async () => {
+                            const location = await convertAddressToCord(formData.location.address);
+                            if (location) {
+                                setMapPinPos(location);
+                            }
+                        }}
+                    />
+                }
 
                 <p>Select the exact location from Google Map below</p>
 

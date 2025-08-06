@@ -38,6 +38,7 @@ export async function getAllListings({
                 query = {
                     $or: [
                         { name: searchRegExp },
+                        { slug: searchRegExp },
                         { "location.state": searchRegExp },
                         { "location.city": searchRegExp },
                         { "location.address": searchRegExp },

@@ -21,6 +21,7 @@ import { GetOneListingBySlugResponseDataInterface } from '@/app/api/listing-mana
 import LoadingElement from '@/components/ui-elements/LoadingElement';
 import { handleUpdateListingFormSubmit } from './handleFormSubmit';
 import { useRouter } from 'next/navigation';
+import { convertAddressToCord } from '@/functions/client/GoogleMap';
 
 const ListingForm = ({
     slug,
@@ -341,6 +342,23 @@ const ListingForm = ({
                         }}
                     />
                 </div>
+
+                {
+                    formData.location.address &&
+                    <Button
+                        label='Find in Google Map'
+                        shape={"rounded"}
+                        size={"small"}
+                        variant={"primary"}
+                        type='button'
+                        onClick={async () => {
+                            const location = await convertAddressToCord(formData.location.address);
+                            if (location) {
+                                setMapPinPos(location);
+                            }
+                        }}
+                    />
+                }
 
                 <p>Select the exact location from Google Map below</p>
 
