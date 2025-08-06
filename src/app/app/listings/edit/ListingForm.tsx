@@ -133,7 +133,7 @@ const ListingForm = ({
 
             setFetchingListing(false)
         })()
-    }, [])
+    }, [listingId])
 
     if (fetchingListing) {
         return <LoadingElement message='Loading Listing Data...' />
