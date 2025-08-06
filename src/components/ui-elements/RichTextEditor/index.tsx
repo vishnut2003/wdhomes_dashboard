@@ -77,6 +77,7 @@ export default function TiptapEditor({
                     ].map((option, index) => (
                         <button
                             key={index}
+                            type='button'
                             className='text-sm py-2 px-3 font-semibold rounded-md bg-dark-2 text-white dark:bg-white dark:text-dark-2'
                             onClick={() => {
                                 if (option.value === "p") {
