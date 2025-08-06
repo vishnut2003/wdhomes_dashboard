@@ -94,7 +94,6 @@ const ListingForm = ({
             try {
 
                 const { data } = await axios.post<GetOneListingBySlugResponseDataInterface>('/api/listing-manager/get-one-by-slug', { slug });
-                console.log(data);
                 if (data.images.featuredImage) {
                     const image = data.images.featuredImage;
                     const featuredImage = base64ToFile(image.buffer, image.name, image.type)
@@ -136,7 +135,7 @@ const ListingForm = ({
 
             setFetchingListing(false)
         })()
-    }, [])
+    }, [slug])
 
     if (fetchingListing) {
         return <LoadingElement message='Loading Listing Data...' />
