@@ -49,7 +49,7 @@ const ListingsFilterElement = () => {
             onSubmit={handleFormSubmit}
         >
             <InputGroup
-                label='Search User'
+                label='Search Listing'
                 placeholder='Name/Slug/Location'
                 type='text'
                 className='w-full'
