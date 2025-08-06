@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 type Props = {
     searchParams: Promise<{
-        slug: string,
+        id: string,
     }>
 }
 
@@ -21,9 +21,9 @@ const EditListingPage = async ({
     searchParams,
 }: Props) => {
 
-    const slug = (await searchParams).slug;
+    const listingId = (await searchParams).id;
 
-    if (!slug) {
+    if (!listingId) {
         notFound();
     }
 
@@ -32,7 +32,7 @@ const EditListingPage = async ({
             <div className="mx-auto w-full max-w-[1080px]">
                 <Breadcrumb pageName="Add Listings" />
                 <ListingForm
-                    slug={slug}
+                    currentListingId={listingId}
                 />
             </div>
         </div>

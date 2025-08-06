@@ -12,8 +12,8 @@ import {
 import { useRouter } from 'next/navigation';
 
 
-const ActionMenu = ({ listingSlug }: {
-    listingSlug: string,
+const ActionMenu = ({ listingId }: {
+    listingId: string,
 }) => {
 
     const router = useRouter();
@@ -37,11 +37,11 @@ const ActionMenu = ({ listingSlug }: {
             onValueChange={(value) => {
                 switch (value) {
                     case "edit":
-                        router.push(`/app/listings/edit?slug=${listingSlug}`);
+                        router.push(`/app/listings/edit?id=${listingId}`);
                         break;
-                        
-                        case "update":
-                        router.push(`/app/listings/updates?slug=${listingSlug}`);
+
+                    case "update":
+                        router.push(`/app/listings/updates?id=${listingId}`);
                         break;
 
                     default:

@@ -90,7 +90,7 @@ const AllListingsTable = async ({ className, data }: {
                                 className='text-left'
                             >
                                 <ActionMenu
-                                    listingSlug={listing.slug}
+                                    listingId={listing._id?.toString() as string}
                                 />
                             </TableCell>
                         </TableRow>

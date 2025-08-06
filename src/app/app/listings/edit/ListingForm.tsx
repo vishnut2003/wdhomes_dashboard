@@ -24,14 +24,14 @@ import { useRouter } from 'next/navigation';
 import { convertAddressToCord } from '@/functions/client/GoogleMap';
 
 const ListingForm = ({
-    slug,
+    currentListingId
 }: {
-    slug: string,
+    currentListingId: string,
 }) => {
 
     const router = useRouter();
 
-    const [listingId, setListingId] = useState<string>();
+    const [listingId] = useState<string>(currentListingId);
 
     const [fetchingListing, setFetchingListing] = useState<boolean>(true);
 
@@ -93,7 +93,7 @@ const ListingForm = ({
         (async () => {
             try {
 
-                const { data } = await axios.post<GetOneListingBySlugResponseDataInterface>('/api/listing-manager/get-one-by-slug', { slug });
+                const { data } = await axios.post<GetOneListingBySlugResponseDataInterface>('/api/listing-manager/get-one-by-slug', { listingId });
                 if (data.images.featuredImage) {
                     const image = data.images.featuredImage;
                     const featuredImage = base64ToFile(image.buffer, image.name, image.type)
@@ -126,8 +126,6 @@ const ListingForm = ({
                     location,
                 })
 
-                setListingId(data.listingData._id as string);
-
             } catch (err) {
                 const message = handleCatchBlock(err);
                 setError(message);
@@ -135,7 +133,7 @@ const ListingForm = ({
 
             setFetchingListing(false)
         })()
-    }, [slug])
+    }, [])
 
     if (fetchingListing) {
         return <LoadingElement message='Loading Listing Data...' />
