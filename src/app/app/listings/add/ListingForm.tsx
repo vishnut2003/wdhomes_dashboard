@@ -4,8 +4,8 @@ import InputGroup from '@/components/FormElements/InputGroup'
 import { ShowcaseSection } from '@/components/Layouts/showcase-section'
 import { Button } from '@/components/ui-elements/button';
 import FileUploadUI from '@/components/ui-elements/FileUploadUI';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import React, { ChangeEvent, FormEvent, useState } from 'react'
+import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
+import React, { useState } from 'react'
 import ImageGalleryUpload from './ImageGalleryUpload';
 import InputDropdownElement from '@/components/ui-elements/InputDropdown';
 import CitiesList from '@/types/CitiesLists';
@@ -30,6 +30,8 @@ const ListingForm = () => {
     if (!GOOGLE_API_KEY) {
         throw new Error("NEXT_PUBLIC_GOOGLE_CLOUD_API Key not found")
     }
+
+    const { isLoaded: isMapScriptLoaded, loadError: GoogleMapError } = useLoadScript({ googleMapsApiKey: GOOGLE_API_KEY });
 
     const [featuredImage, setFeaturedImage] = useState<File | null>(null);
     const [imageGallery, setImageGallery] = useState<File[]>([]);
@@ -288,37 +290,50 @@ const ListingForm = () => {
 
                 <p>Select the exact location from Google Map below</p>
 
-                <LoadScript
-                    googleMapsApiKey={GOOGLE_API_KEY}
-                >
-                    <GoogleMap
-                        mapContainerStyle={{
-                            width: "100%",
-                            height: "400px",
-                            borderRadius: "10px",
-                        }}
-                        zoom={11}
-                        center={{
-                            lat: 28.6139,
-                            lng: 77.2090,
-                        }}
-                        onClick={(event) => {
-                            const lat = event.latLng?.lat();
-                            const lng = event.latLng?.lng();
-                            if (!lat || !lng) {
-                                return;
+                {
+                    isMapScriptLoaded ?
+                        <GoogleMap
+                            mapContainerStyle={{
+                                width: "100%",
+                                height: "400px",
+                                borderRadius: "10px",
+                            }}
+                            zoom={11}
+                            center={{
+                                lat: 28.6139,
+                                lng: 77.2090,
+                            }}
+                            onClick={(event) => {
+                                const lat = event.latLng?.lat();
+                                const lng = event.latLng?.lng();
+                                if (!lat || !lng) {
+                                    return;
+                                }
+                                setMapPinPos({ lat, lng })
+                            }}
+                        >
+                            {
+                                mapPinPos &&
+                                <Marker
+                                    position={mapPinPos}
+                                />
                             }
-                            setMapPinPos({ lat, lng })
-                        }}
-                    >
-                        {
-                            mapPinPos &&
-                            <Marker
-                                position={mapPinPos}
-                            />
-                        }
-                    </GoogleMap>
-                </LoadScript>
+                        </GoogleMap>
+                        : <p>Loading Google Map...</p>
+                }
+
+                {
+                    mapPinPos ?
+                        <p>Lat: {mapPinPos.lat}, Lng: {mapPinPos.lng}</p>
+                        : <p>Please select exact location from Google Map.</p>
+                }
+
+                {
+                    GoogleMapError &&
+                    <ErrorElement
+                        message={GoogleMapError.message}
+                    />
+                }
 
             </ShowcaseSection>
 

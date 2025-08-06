@@ -4,14 +4,14 @@ import InputGroup from '@/components/FormElements/InputGroup'
 import { ShowcaseSection } from '@/components/Layouts/showcase-section'
 import { Button } from '@/components/ui-elements/button';
 import FileUploadUI from '@/components/ui-elements/FileUploadUI';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import React, { useEffect, useState } from 'react'
 import InputDropdownElement from '@/components/ui-elements/InputDropdown';
 import CitiesList from '@/types/CitiesLists';
 import { TextAreaGroup } from '@/components/FormElements/InputGroup/text-area';
 import TiptapEditor from '@/components/ui-elements/RichTextEditor';
 import Image from 'next/image';
-import { base64ToFile, bufferToFile, handleCatchBlock } from '@/functions/common';
+import { base64ToFile, handleCatchBlock } from '@/functions/common';
 import ErrorElement from '@/components/ui-elements/ErrorElement';
 import SuccessElement from '@/components/ui-elements/SuccessElement';
 import { RiLoaderLine } from '@remixicon/react';
@@ -19,6 +19,8 @@ import ImageGalleryUpload from '../add/ImageGalleryUpload';
 import axios from 'axios';
 import { GetOneListingBySlugResponseDataInterface } from '@/app/api/listing-manager/get-one-by-slug/route';
 import LoadingElement from '@/components/ui-elements/LoadingElement';
+import { handleUpdateListingFormSubmit } from './handleFormSubmit';
+import { useRouter } from 'next/navigation';
 
 const ListingForm = ({
     slug,
@@ -26,13 +28,17 @@ const ListingForm = ({
     slug: string,
 }) => {
 
+    const router = useRouter();
+
+    const [listingId, setListingId] = useState<string>();
+
     const [fetchingListing, setFetchingListing] = useState<boolean>(true);
 
     const [error, setError] = useState<string | null>(null);
     const [inProgress, setInProgress] = useState<boolean>(false);
     const [success, setSuccess] = useState<boolean>(false);
 
-    const [resetTipTapEditor, setResetTipTapEditor] = useState<number>(0);
+    const [resetTipTapEditor] = useState<number>(0);
 
     const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_CLOUD_API;
 
@@ -52,7 +58,7 @@ const ListingForm = ({
             address: string,
             state: string,
             city: string,
-        }
+        },
     }>({
         listingName: "",
         slug: "",
@@ -80,12 +86,14 @@ const ListingForm = ({
         lng: number,
     } | null>(null);
 
+    const { isLoaded: isMapScriptLoaded, loadError: GoogleMapError } = useLoadScript({ googleMapsApiKey: GOOGLE_API_KEY });
+
     useEffect(() => {
         (async () => {
             try {
 
                 const { data } = await axios.post<GetOneListingBySlugResponseDataInterface>('/api/listing-manager/get-one-by-slug', { slug });
-
+                console.log(data);
                 if (data.images.featuredImage) {
                     const image = data.images.featuredImage;
                     const featuredImage = base64ToFile(image.buffer, image.name, image.type)
@@ -118,6 +126,8 @@ const ListingForm = ({
                     location,
                 })
 
+                setListingId(data.listingData._id as string);
+
             } catch (err) {
                 const message = handleCatchBlock(err);
                 setError(message);
@@ -141,31 +151,27 @@ const ListingForm = ({
 
                 try {
 
-                    setSuccess(true)
-                    setTimeout(() => setSuccess(false), 5000);
+                    if (!listingId) {
+                        throw new Error("Listing ID not found.")
+                    }
 
-                    setFormData({
-                        description: '',
-                        listingName: '',
-                        listingPrice: '',
+                    await handleUpdateListingFormSubmit({
+                        name: formData.listingName,
+                        slug: formData.slug,
+                        price: formData.listingPrice,
+                        featuredImage,
+                        description: formData.description,
+                        imageGallery,
+                        attributes,
                         location: {
-                            state: "",
-                            address: "",
-                            city: "",
+                            ...formData.location,
+                            pinpoint: mapPinPos || null,
                         },
-                        slug: '',
+                        listingId,
                     })
 
-                    setMapPinPos(null)
-                    setAttributes([
-                        {
-                            label: "",
-                            value: "",
-                        }
-                    ])
-                    setFeaturedImage(null)
-                    setImageGallery([]);
-                    setResetTipTapEditor(prev => ++prev);
+                    setSuccess(true);
+                    router.push('/app/listings');
 
                 } catch (err) {
                     const message = handleCatchBlock(err);
@@ -338,37 +344,50 @@ const ListingForm = ({
 
                 <p>Select the exact location from Google Map below</p>
 
-                <LoadScript
-                    googleMapsApiKey={GOOGLE_API_KEY}
-                >
-                    <GoogleMap
-                        mapContainerStyle={{
-                            width: "100%",
-                            height: "400px",
-                            borderRadius: "10px",
-                        }}
-                        zoom={11}
-                        center={{
-                            lat: 28.6139,
-                            lng: 77.2090,
-                        }}
-                        onClick={(event) => {
-                            const lat = event.latLng?.lat();
-                            const lng = event.latLng?.lng();
-                            if (!lat || !lng) {
-                                return;
+                {
+                    isMapScriptLoaded ?
+                        <GoogleMap
+                            mapContainerStyle={{
+                                width: "100%",
+                                height: "400px",
+                                borderRadius: "10px",
+                            }}
+                            zoom={11}
+                            center={{
+                                lat: 28.6139,
+                                lng: 77.2090,
+                            }}
+                            onClick={(event) => {
+                                const lat = event.latLng?.lat();
+                                const lng = event.latLng?.lng();
+                                if (!lat || !lng) {
+                                    return;
+                                }
+                                setMapPinPos({ lat, lng })
+                            }}
+                        >
+                            {
+                                mapPinPos &&
+                                <Marker
+                                    position={mapPinPos}
+                                />
                             }
-                            setMapPinPos({ lat, lng })
-                        }}
-                    >
-                        {
-                            mapPinPos &&
-                            <Marker
-                                position={mapPinPos}
-                            />
-                        }
-                    </GoogleMap>
-                </LoadScript>
+                        </GoogleMap>
+                        : <p>Loading Google Map...</p>
+                }
+
+                {
+                    mapPinPos ?
+                        <p>Lat: {mapPinPos.lat}, Lng: {mapPinPos.lng}</p>
+                        : <p>Please select exact location from Google Map.</p>
+                }
+
+                {
+                    GoogleMapError &&
+                    <ErrorElement
+                        message={GoogleMapError.message}
+                    />
+                }
 
             </ShowcaseSection>
 
@@ -464,7 +483,7 @@ const ListingForm = ({
             {
                 success &&
                 <SuccessElement
-                    message={"Listing added"}
+                    message={"Changes saved."}
                 />
             }
 
@@ -472,7 +491,7 @@ const ListingForm = ({
                 className='flex justify-end'
             >
                 <Button
-                    label={inProgress ? "Loading..." : 'Add Listing'}
+                    label={inProgress ? "Loading..." : 'Save Changes'}
                     variant={"primary"}
                     shape={"rounded"}
                     className='disabled:opacity-60'

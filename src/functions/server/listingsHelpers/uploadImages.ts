@@ -1,19 +1,20 @@
 import fs from "fs";
 import fsPromise from "fs/promises";
 import path from "path";
+import { v4 as uuid } from "uuid";
 
 export async function uploadListingsImages({
     featuredImage,
     galleryImages,
-    slug,
+    featureExistingName,
 }: {
-    featuredImage: File,
+    featuredImage: File | null,
     galleryImages: File[],
-    slug: string,
+    featureExistingName?: string,
 }) {
     return new Promise<{
         galleryImagesReturnNames: string[],
-        featuredImageReturnName: string,
+        featuredImageReturnName: string | null,
     }>(async (resolve, reject) => {
         try {
             const LISTINGS_IMAGES_FOLDER = process.env.LISTINGS_IMAGES_FOLDER;
@@ -33,29 +34,32 @@ export async function uploadListingsImages({
                 await fsPromise.mkdir(imageGalleryFolder, { recursive: true });
             }
 
-            const featuredImageBuffer = Buffer.from(await featuredImage.arrayBuffer());
-            // Extract file extension from MIME type, e.g., "image/png" -> ".png"
-            const ext = featuredImage.type ? `.${featuredImage.type.split('/')[1]}` : '';
+            let featuredImageReturnName: string | null = null;
 
-            const featuredImageReturnName = `${slug}${ext}`;
+            if (featuredImage) {
+                const featuredImageBuffer = Buffer.from(await featuredImage.arrayBuffer());
+                // Extract file extension from MIME type, e.g., "image/png" -> ".png"
+                const ext = featuredImage.type ? `.${featuredImage.type.split('/')[1]}` : '';
 
-            await fsPromise.writeFile(
-                path.join(featuredImageFolder, `${slug}${ext}`),
-                featuredImageBuffer
-            );
+                featuredImageReturnName = `${featureExistingName || uuid()}${ext}`;
+
+                await fsPromise.writeFile(
+                    path.join(featuredImageFolder, featuredImageReturnName),
+                    featuredImageBuffer
+                );
+            }
 
             const galleryImagesReturnNames = [];
 
-            let imageIndex = 1;
             for (const image of galleryImages) {
                 const buffer = Buffer.from(await image.arrayBuffer());
                 const ext = image.type ? `.${image.type.split('/')[1]}` : '';
+                const imagename = uuid();
                 await fsPromise.writeFile(
-                    path.join(imageGalleryFolder, `${slug}-${imageIndex}${ext}`),
+                    path.join(imageGalleryFolder, `${imagename}${ext}`),
                     buffer,
                 );
-                galleryImagesReturnNames.push(`${slug}-${imageIndex}${ext}`);
-                imageIndex++;
+                galleryImagesReturnNames.push(`${imagename}${ext}`);
             }
 
             return resolve({

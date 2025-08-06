@@ -55,7 +55,6 @@ export async function CreateListing(data: CreateListingApiRequestData) {
             } = await uploadListingsImages({
                 featuredImage: data.featuredImage,
                 galleryImages: data.galleryImages,
-                slug: data.slug,
             });
 
             const listing = new ListingModel({
