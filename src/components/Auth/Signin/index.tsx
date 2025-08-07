@@ -21,9 +21,11 @@ export default function Signin() {
 
       <div className="mt-6 text-center">
         <p>
-          Forget password?{" "}
-          <Link href="/auth/forget-password" className="text-primary">
-            Reset
+          <Link
+            href="/auth/forgot-password"
+            className="hover:text-primary dark:text-white dark:hover:text-primary"
+          >
+            Forgot Password?
           </Link>
         </p>
       </div>

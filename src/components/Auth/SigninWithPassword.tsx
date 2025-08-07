@@ -22,6 +22,8 @@ export default function SigninWithPassword() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
@@ -73,7 +75,7 @@ export default function SigninWithPassword() {
       />
 
       <InputGroup
-        type="password"
+        type={showPassword ? "text" : "password"}
         label="Password"
         className="mb-5 [&_input]:py-[15px]"
         placeholder="Enter your password"
@@ -84,6 +86,17 @@ export default function SigninWithPassword() {
       />
 
       <div className="mb-6 flex items-center justify-between gap-2 py-2 font-medium">
+        <Checkbox
+          label="Show password"
+          name="show-password"
+          withIcon="check"
+          minimal
+          radius="md"
+          onChange={(e) =>
+            setShowPassword(e.target.checked)
+          }
+        />
+        
         <Checkbox
           label="Remember me"
           name="remember"
@@ -97,13 +110,6 @@ export default function SigninWithPassword() {
             })
           }
         />
-
-        <Link
-          href="/auth/forgot-password"
-          className="hover:text-primary dark:text-white dark:hover:text-primary"
-        >
-          Forgot Password?
-        </Link>
       </div>
 
       <div className="mb-4.5">
