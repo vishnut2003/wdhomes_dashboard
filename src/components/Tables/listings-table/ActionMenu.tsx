@@ -7,7 +7,6 @@ import {
     SelectContent,
     SelectItem,
     SelectTrigger,
-    SelectValue,
 } from "@/components/ui/select"
 import { useRouter } from 'next/navigation';
 
@@ -27,8 +26,12 @@ const ActionMenu = ({ listingId }: {
             value: "edit",
         },
         {
-            label: "Updates",
-            value: "updates",
+            label: "Comments",
+            value: "comments",
+        },
+        {
+            label: "Delete",
+            value: "delete",
         },
     ]);
 
@@ -40,8 +43,12 @@ const ActionMenu = ({ listingId }: {
                         router.push(`/app/listings/edit?id=${listingId}`);
                         break;
 
-                    case "update":
-                        router.push(`/app/listings/updates?id=${listingId}`);
+                    case "comments":
+                        router.push(`/app/listings/comments?id=${listingId}`);
+                        break;
+                    
+                    case "delete":
+                        router.push(`/app/listings/delete?id=${listingId}`);
                         break;
 
                     default:

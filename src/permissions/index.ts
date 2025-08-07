@@ -15,12 +15,14 @@ const permissions: RolesPermissionsListInterface = {
         "/app/listings/add",
         "/app/listings/edit",
         "/app/listings/updates",
+        "/app/listings/delete",
     ],
     "executive": [
         "/app/listings",
         "/app/listings/add",
         "/app/listings/edit",
         "/app/listings/updates",
+        "/app/listings/delete",
     ],
     "client": [
         "/app",
