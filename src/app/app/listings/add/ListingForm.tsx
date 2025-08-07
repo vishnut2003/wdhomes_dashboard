@@ -210,12 +210,27 @@ const ListingForm = () => {
                 <InputGroup
                     label='Price start from'
                     placeholder='100000'
-                    type='number'
+                    type='text'
                     value={formData.listingPrice}
                     handleChange={(event) => {
+
+                        let value: string | number = event.target.value;
+
+                        try {
+
+                            value = parseInt(value);
+
+                        } catch (err) {
+                            return;
+                        }
+
+                        if (value < 0) {
+                            value = 0;
+                        }
+
                         setFormData(prev => ({
                             ...prev,
-                            listingPrice: event.target.value,
+                            listingPrice: value.toString(),
                         }));
                     }}
                 />
