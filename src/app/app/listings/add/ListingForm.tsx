@@ -18,6 +18,7 @@ import ErrorElement from '@/components/ui-elements/ErrorElement';
 import { RiLoaderLine } from '@remixicon/react';
 import { convertAddressToCord } from '@/functions/client/GoogleMap';
 import SuccessMesage from './SuccessMesage';
+import IndiaStates from '@/types/IndiaStates';
 
 const ListingForm = () => {
 
@@ -102,17 +103,17 @@ const ListingForm = () => {
 
                     setSuccess(true)
 
-                    setFormData({
+                    setFormData(prev => ({
                         description: '',
                         listingName: '',
                         listingPrice: '',
                         location: {
-                            state: "",
+                            state: prev.location.state,
                             address: "",
-                            city: "",
+                            city: prev.location.city,
                         },
                         slug: '',
-                    })
+                    }))
 
                     setMapPinPos(undefined)
                     setAttributes([
@@ -242,18 +243,21 @@ const ListingForm = () => {
                 <div
                     className='sm:flex flex-wrap space-y-5 sm:space-y-0 gap-y-3'
                 >
-                    <InputGroup
+
+                    <InputDropdownElement
                         label='State'
-                        placeholder='State'
-                        type='text'
+                        options={IndiaStates.map((state) => ({
+                            label: state,
+                            value: state,
+                        }))}
+                        placeholder={formData.location.state || "State"}
                         className='w-full sm:w-1/2 pl-0 sm:pr-[10px]'
-                        value={formData.location.state}
-                        handleChange={(event) => {
+                        valueOnChange={(value) => {
                             setFormData(prev => ({
                                 ...prev,
                                 location: {
                                     ...prev.location,
-                                    state: event.target.value,
+                                    state: value,
                                 }
                             }));
                         }}
@@ -262,8 +266,8 @@ const ListingForm = () => {
                     <InputDropdownElement
                         label='City'
                         options={CitiesList}
-                        placeholder='City'
-                        className='w-1/2'
+                        placeholder={formData.location.city || "City"}
+                        className='sm:w-1/2'
                         valueOnChange={(value) => {
                             setFormData(prev => ({
                                 ...prev,

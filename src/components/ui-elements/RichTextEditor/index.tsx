@@ -3,19 +3,23 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import InputDropdownElement from '../InputDropdown';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function TiptapEditor({
     value,
     setValue,
     reset,
     disableUseEffect,
+    disableEmptyOnClick
 }: {
     value: string,
     setValue: (html: string) => void,
     reset: number,
     disableUseEffect?: boolean,
+    disableEmptyOnClick?: boolean,
 }) {
+
+    const [disableClearing, setDisableClearing] = useState<boolean>(disableEmptyOnClick || false);
 
     const editor = useEditor({
         extensions: [
@@ -104,7 +108,13 @@ export default function TiptapEditor({
                         editor={editor}
                         className='outline-none mt-5'
                         onClick={() => {
+
+                            if (disableClearing) {
+                                return;
+                            }
+
                             editor?.commands.setContent('');
+                            setDisableClearing(true)
                         }}
                     />
                     : <p
