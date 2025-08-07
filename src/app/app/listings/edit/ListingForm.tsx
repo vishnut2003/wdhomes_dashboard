@@ -254,7 +254,7 @@ const ListingForm = ({
                 <InputGroup
                     label='Price start from'
                     placeholder='100000'
-                    type='number'
+                    type='text'
                     value={formData.listingPrice}
                     handleChange={(event) => {
 
