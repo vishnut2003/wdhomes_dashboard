@@ -5,7 +5,7 @@ import { ShowcaseSection } from '@/components/Layouts/showcase-section'
 import { Button } from '@/components/ui-elements/button';
 import FileUploadUI from '@/components/ui-elements/FileUploadUI';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import ImageGalleryUpload from './ImageGalleryUpload';
 import InputDropdownElement from '@/components/ui-elements/InputDropdown';
 import CitiesList from '@/types/CitiesLists';
@@ -15,9 +15,9 @@ import Image from 'next/image';
 import { handleAddListingFormSubmit } from './handleSubmit';
 import { handleCatchBlock } from '@/functions/common';
 import ErrorElement from '@/components/ui-elements/ErrorElement';
-import SuccessElement from '@/components/ui-elements/SuccessElement';
 import { RiLoaderLine } from '@remixicon/react';
 import { convertAddressToCord } from '@/functions/client/GoogleMap';
+import SuccessMesage from './SuccessMesage';
 
 const ListingForm = () => {
 
@@ -74,6 +74,8 @@ const ListingForm = () => {
         lng: number,
     }>();
 
+    const topElementRef = useRef<HTMLParagraphElement>(null);
+
     return (
         <form
             className='space-y-6'
@@ -99,7 +101,6 @@ const ListingForm = () => {
                     })
 
                     setSuccess(true)
-                    setTimeout(() => setSuccess(false), 5000);
 
                     setFormData({
                         description: '',
@@ -135,6 +136,8 @@ const ListingForm = () => {
             <ShowcaseSection
                 title='Listings Featured Image'
             >
+                {/* Element for scroll to top */}
+                <p ref={topElementRef}></p>
                 {
                     featuredImage ?
                         <div
@@ -444,12 +447,15 @@ const ListingForm = () => {
                 />
             }
 
-            {
-                success &&
-                <SuccessElement
-                    message={"Listing added"}
-                />
-            }
+            <SuccessMesage
+                open={success}
+                onOpenChange={(value) => {
+                    setSuccess(value);
+                    topElementRef.current?.scrollIntoView({
+                        behavior: "smooth",
+                    })
+                }}
+            />
 
             <div
                 className='flex justify-end'

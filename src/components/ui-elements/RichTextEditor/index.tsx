@@ -103,6 +103,9 @@ export default function TiptapEditor({
                     <EditorContent
                         editor={editor}
                         className='outline-none mt-5'
+                        onClick={() => {
+                            editor?.commands.setContent('');
+                        }}
                     />
                     : <p
                         className='mt-3'

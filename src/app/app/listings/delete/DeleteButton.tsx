@@ -12,7 +12,8 @@ const DeleteButton = ({ listingId }: {
 }) => {
 
     const router = useRouter();
-    const [data, action, isPending] = useActionState(handleDeleteConfirm, null);
+    const [data, action] = useActionState(handleDeleteConfirm, null);
+    const [inProgress, setInProgress] = useState<boolean>(false);
 
     useEffect(() => {
         if (data?.success === true) {
@@ -26,8 +27,9 @@ const DeleteButton = ({ listingId }: {
                 label='Confirm'
                 shape={"rounded"}
                 size={"small"}
+                disabled={inProgress}
                 icon={
-                    isPending ?
+                    inProgress ?
                         <RiLoaderLine
                             size={20}
                             className='animate-spin'
@@ -37,6 +39,7 @@ const DeleteButton = ({ listingId }: {
                         />
                 }
                 onClick={() => {
+                    setInProgress(true)
                     const formData = new FormData();
                     formData.append('listingId', listingId);
                     action(formData);
