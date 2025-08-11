@@ -46,12 +46,6 @@ export async function getUploadedImages({
 
             const mimeType = `image/${featuredImageName.split('.')[1]}`;
 
-            const featuredImageFile = await bufferToFile({
-                buffer: featuredImage,
-                fileName: featuredImageName,
-                type: mimeType,
-            })
-
             const galleryImageFiles: {
                 buffer: string,
                 name: string,

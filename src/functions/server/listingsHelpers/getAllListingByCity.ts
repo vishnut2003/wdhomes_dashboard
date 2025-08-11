@@ -1,3 +1,4 @@
+import { dbConnect } from "@/configs/dbConfig";
 import ListingModel, { ListingModelInterface } from "@/models/ListingModel";
 
 const LISTING_PER_PAGE = 10;
@@ -25,6 +26,8 @@ export async function getAllListingsByCity({
                 'location.city': city,
             }
 
+            await dbConnect();
+
             const listingsCount = await ListingModel.countDocuments(query);
             const totalPage = Math.ceil(listingsCount / LISTING_PER_PAGE);
 
@@ -35,8 +38,23 @@ export async function getAllListingsByCity({
 
             const listings = await ListingModel.find(query) as ListingModelInterface[];
 
+            const finalListingData: ListingModelInterface[] = []
+
+            for (const listing of listings) {
+                listing['featuredImage'] = `/api/images/listings/featured/${listing.featuredImage}`;
+
+                const galleryImages: string[] = []
+                for (const image of listing.galleryImages) {
+                    const filename = `/api/images/listings/gallery/${image}`;
+                    galleryImages.push(filename);
+                }
+
+                listing['galleryImages'] = galleryImages;
+                finalListingData.push(listing);
+            }
+
             return resolve({
-                data: listings,
+                data: finalListingData,
                 page,
                 totalPage,
                 totalRecords: listingsCount,
