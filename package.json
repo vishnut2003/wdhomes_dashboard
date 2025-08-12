@@ -21,6 +21,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
+    "file-type": "^21.0.0",
     "flatpickr": "^4.6.13",
     "framer-motion": "^12.23.12",
     "jsvectormap": "^1.6.0",

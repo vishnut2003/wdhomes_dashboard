@@ -16,6 +16,7 @@ const permissions: RolesPermissionsListInterface = {
         "/app/listings/edit",
         "/app/listings/updates",
         "/app/listings/delete",
+        "/app/listings/comments",
     ],
     "executive": [
         "/app/listings",
@@ -23,6 +24,7 @@ const permissions: RolesPermissionsListInterface = {
         "/app/listings/edit",
         "/app/listings/updates",
         "/app/listings/delete",
+        "/app/listings/comments",
     ],
     "client": [
         "/app",

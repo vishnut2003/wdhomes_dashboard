@@ -1,7 +1,6 @@
 import path from "path";
 import fs from "fs";
 import fsPromise from "fs/promises";
-import { bufferToFile } from "@/functions/common";
 
 export async function getUploadedImages({
     featuredImageName,
