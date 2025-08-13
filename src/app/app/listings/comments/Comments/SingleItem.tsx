@@ -16,11 +16,13 @@ const CommentItem = ({
     const { r, g, b } = hexToRgb(hexColor);
 
     return (
-        <div>
+        <div
+            className='space-y-3'
+        >
             {
                 user ?
                     <div
-                        className='flex items-center justify-start'
+                        className='flex items-center justify-start gap-3'
                     >
                         <div
                             className="min-w-[45px] min-h-[45px] font-semibold text-sm flex items-center justify-center rounded-full"
@@ -43,21 +45,34 @@ const CommentItem = ({
                     : <p>Super Admin</p>
             }
 
-            <div>
+            <div
+                className='bg-white dark:bg-dark py-3 px-4 rounded-md'
+            >
                 <div
                     dangerouslySetInnerHTML={{ __html: comment.comment }}
+                    className='listing-comment-text-content'
                 ></div>
 
-                <div>
-                    {
-                        files.map((file, index) => (
-                            <CommentFile
-                                key={index}
-                                data={file}
-                            />
-                        ))
-                    }
-                </div>
+                {
+                    files.length > 0 &&
+                    <div
+                        className='py-4 px-5 bg-gray-2 dark:bg-dark-2 rounded-md space-y-3'
+                    >
+                        <h2
+                            className='text-lg font-semibold'
+                        >Attachments</h2>
+                        <div>
+                            {
+                                files.map((file, index) => (
+                                    <CommentFile
+                                        key={index}
+                                        data={file}
+                                    />
+                                ))
+                            }
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     )

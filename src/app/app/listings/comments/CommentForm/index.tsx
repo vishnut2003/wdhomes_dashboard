@@ -25,6 +25,9 @@ const AddCommentForm = ({ listingId }: {
     useEffect(() => {
 
         if (state?.success === true) {
+            setComment("");
+            setFiles([]);
+            setResetEditor(prev => ++prev);
             router.refresh();
         }
 

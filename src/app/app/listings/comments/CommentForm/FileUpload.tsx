@@ -49,7 +49,6 @@ const FileUploadForComment = ({
                 hidden
             />
 
-
             <div
                 className="pt-[20px]"
             >
