@@ -15,7 +15,7 @@ const CommentFile = ({ data }: {
     useEffect(() => {
         const file = base64ToFile(data.buffer, data.name, data.type);
         setFile(file);
-    }, [])
+    }, [data])
 
     if (file) {
         return (
