@@ -34,7 +34,7 @@ const AddCommentForm = ({ listingId }: {
             router.refresh();
         }
 
-    }, [state, router])
+    }, [state, router, doReset])
 
     return (
         <form
