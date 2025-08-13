@@ -20,14 +20,17 @@ const AddCommentForm = ({ listingId }: {
     const [comment, setComment] = useState<string>('');
     const [files, setFiles] = useState<File[]>([]);
 
-    const [state, formAction, isPending] = useActionState(commentFormAction, null,);
+    const [state, formAction, isPending] = useActionState(commentFormAction, null);
+
+    const [doReset, setDoReset] = useState<boolean>(false);
 
     useEffect(() => {
 
-        if (state?.success === true) {
+        if (state?.success === true && doReset) {
             setComment("");
             setFiles([]);
             setResetEditor(prev => ++prev);
+            setDoReset(false);
             router.refresh();
         }
 
@@ -46,6 +49,8 @@ const AddCommentForm = ({ listingId }: {
                 for (const file of files) {
                     formData.append('files', file);
                 }
+
+                setDoReset(true);
 
                 startTransition(() => {
                     formAction(formData);

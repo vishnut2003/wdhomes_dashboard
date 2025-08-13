@@ -22,7 +22,9 @@ export async function uploadListingCommentFile({ file }: {
             }
 
             const uid = uuid();
-            const ext = file.name.split('.')[1];
+            console.log(file.name)
+            console.log(file.type.split('/')[1])
+            const ext = file.type.split('/')[1];
 
             const filename = `${uid}.${ext}`;
 
