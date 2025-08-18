@@ -262,6 +262,10 @@ const ListingForm = ({
 
                         try {
 
+                            if (!value) {
+                                value = `0`;
+                            }
+
                             value = parseInt(value);
 
                         } catch (err) {
