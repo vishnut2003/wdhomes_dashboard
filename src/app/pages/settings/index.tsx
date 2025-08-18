@@ -1,5 +1,4 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { PersonalInfoForm } from "./_components/personal-info";
 import { UploadPhotoForm } from "./_components/upload-photo";
 
 export default function SettingsPage() {
@@ -9,7 +8,7 @@ export default function SettingsPage() {
 
       <div className="grid grid-cols-5 gap-8">
         <div className="col-span-5 xl:col-span-3">
-          <PersonalInfoForm />
+          {/* <PersonalInfoForm /> */}
         </div>
         <div className="col-span-5 xl:col-span-2">
           <UploadPhotoForm />
