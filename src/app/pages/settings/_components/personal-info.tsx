@@ -1,40 +1,98 @@
+'use client';
+
 import {
   CallIcon,
   EmailIcon,
+  PasswordIcon,
   PencilSquareIcon,
   UserIcon,
 } from "@/assets/icons";
+import { Checkbox } from "@/components/FormElements/checkbox";
 import InputGroup from "@/components/FormElements/InputGroup";
-import { TextAreaGroup } from "@/components/FormElements/InputGroup/text-area";
 import { ShowcaseSection } from "@/components/Layouts/showcase-section";
+import { Button } from "@/components/ui-elements/button";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useState } from "react";
+import { handleMyAccountFormSubmit } from "./handleFormSubmit";
+import { RiLoaderLine } from "@remixicon/react";
+import ErrorElement from "@/components/ui-elements/ErrorElement";
+import SuccessElement from "@/components/ui-elements/SuccessElement";
 
-export function PersonalInfoForm() {
+export function PersonalInfoForm(user: {
+  fullname: string,
+  nickname: string,
+  username: string,
+  email: string,
+  userId: string,
+}) {
+
+  const router = useRouter();
+
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [inProgress, setInProgress] = useState<boolean>(false)
+
+  const [formData, setFormData] = useState<{
+    username: string,
+    nickname: string,
+    fullname: string,
+    email: string,
+    password: string,
+  }>({
+    ...user,
+    password: "",
+  });
+
+  const [resetPassword, setResetPassword] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    setFormData(prev => ({
+      ...prev,
+      [event.target.name]: event.target.value,
+    }))
+  }
+
   return (
     <ShowcaseSection title="Personal Information" className="!p-7">
-      <form>
+      <form
+        onSubmit={async (event) => {
+          event.preventDefault();
+          await handleMyAccountFormSubmit({
+            resetPassword,
+            setError,
+            setInProgress,
+            setSuccess,
+            userId: user.userId,
+            ...formData,
+          });
+        }}
+      >
         <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
           <InputGroup
             className="w-full sm:w-1/2"
             type="text"
-            name="fullName"
+            name="fullname"
             label="Full Name"
             placeholder="David Jhon"
-            defaultValue="David Jhon"
             icon={<UserIcon />}
             iconPosition="left"
             height="sm"
+            value={formData.fullname}
+            handleChange={handleInputChange}
           />
 
           <InputGroup
             className="w-full sm:w-1/2"
             type="text"
-            name="phoneNumber"
-            label="Phone Number"
-            placeholder="+990 3343 7865"
-            defaultValue={"+990 3343 7865"}
-            icon={<CallIcon />}
+            name="nickname"
+            label="Nickname"
+            placeholder="David"
+            icon={<UserIcon />}
             iconPosition="left"
             height="sm"
+            value={formData.nickname}
+            handleChange={handleInputChange}
           />
         </div>
 
@@ -44,10 +102,11 @@ export function PersonalInfoForm() {
           name="email"
           label="Email Address"
           placeholder="devidjond45@gmail.com"
-          defaultValue="devidjond45@gmail.com"
           icon={<EmailIcon />}
           iconPosition="left"
           height="sm"
+          value={formData.email}
+          handleChange={handleInputChange}
         />
 
         <InputGroup
@@ -56,34 +115,86 @@ export function PersonalInfoForm() {
           name="username"
           label="Username"
           placeholder="devidjhon24"
-          defaultValue="devidjhon24"
           icon={<UserIcon />}
           iconPosition="left"
           height="sm"
+          value={formData.username}
+          handleChange={handleInputChange}
         />
 
-        <TextAreaGroup
+        {/* Reset Password */}
+
+        <div
+          className="flex items-end gap-3 mb-5.5"
+        >
+          <InputGroup
+            label="Reset Password"
+            placeholder="Enter new password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            disabled={!resetPassword}
+            icon={<PasswordIcon />}
+            iconPosition="left"
+            className="w-full"
+            value={formData.password}
+            handleChange={handleInputChange}
+          />
+
+          <Button
+            variant={"primary"}
+            shape={"rounded"}
+            size={"small"}
+            label={resetPassword ? "Disable" : "Reset"}
+            type="button"
+            onClick={() => setResetPassword(prev => !prev)}
+          />
+        </div>
+
+        <div
           className="mb-5.5"
-          label="BIO"
-          placeholder="Write your bio here"
-          icon={<PencilSquareIcon />}
-          defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam lacinia turpis tortor, consequat efficitur mi congue a. Curabitur cursus, ipsum ut lobortis sodales, enim arcu pellentesque lectus ac suscipit diam sem a felis. Cras sapien ex, blandit eu dui et suscipit gravida nunc. Sed sed est quis dui."
-        />
+        >
+          <Checkbox
+            label="Show Password"
+            onChange={(event) => setShowPassword(event.target.checked)}
+          />
+        </div>
 
-        <div className="flex justify-end gap-3">
+        {
+          error &&
+          <ErrorElement
+            message={error}
+          />
+        }
+
+        {
+          success &&
+          <SuccessElement
+            message="Changed saved"
+          />
+        }
+
+        <div className="flex justify-end gap-3 mt-5.5">
           <button
             className="rounded-lg border border-stroke px-6 py-[7px] font-medium text-dark hover:shadow-1 dark:border-dark-3 dark:text-white"
             type="button"
+            onClick={() => router.push('/app')}
           >
             Cancel
           </button>
 
-          <button
-            className="rounded-lg bg-primary px-6 py-[7px] font-medium text-gray-2 hover:bg-opacity-90"
+          <Button
+            label="Save"
             type="submit"
-          >
-            Save
-          </button>
+            shape={"rounded"}
+            size={"small"}
+            icon={
+              inProgress &&
+              <RiLoaderLine
+                size={20}
+                className="animate-spin"
+              />
+            }
+          />
         </div>
       </form>
     </ShowcaseSection>
