@@ -4,6 +4,7 @@ import React from 'react'
 import { Button } from '@/components/ui-elements/button';
 import { generateRandomHexColor, hexToRgb } from '@/functions/common';
 import { GetAllUsersDataResponse } from '@/functions/server/usersHelpers/getAllUsers';
+import Link from 'next/link';
 
 const AllUsersTable = async ({ className, data }: {
     className?: string,
@@ -83,12 +84,10 @@ const AllUsersTable = async ({ className, data }: {
                                 <TableCell
                                     className='text-left'
                                 >
-                                    <Button
-                                        label='Edit'
-                                        variant={"primary"}
-                                        size={"small"}
-                                        shape={"rounded"}
-                                    />
+                                    <Link
+                                        href={`/app/admin/users/edit?id=${user.userId}`}
+                                        className='text-sm py-3 px-4 rounded-md bg-primary text-white'
+                                    >Edit</Link>
                                 </TableCell>
                             </TableRow>
                         )
